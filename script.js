@@ -5,7 +5,7 @@ let firstname;
 let middlename;
 let lastname;
 let nickname;
-let hyphenname;
+let firstletter;
 
 // FETCHING YAY
 
@@ -41,57 +41,87 @@ function prepareData() {
         let gender = student.gender;
         let house = student.house;
 
-// cleaning extra spaces
-        fullname = fullname.replace(/\s+/g, ' ').trim();
+// GENERAL CHANGES
+        // cleaning extra whitespaces
+            fullname = fullname.replace(/\s+/g, ' ').trim();
+            house = house.replace(/\s+/g, ' ').trim();
 
-// convert them into variables we want
+        // making all letters lowercase
+            fullname = fullname.toLowerCase();
+            house = house.toLowerCase();
+
+        // capitalize first letters
+            firstletter = fullname[0].toUpperCase();
+            fullname = fullname.replace(fullname[0], firstletter);
+
+            firstletter = house[0].toUpperCase();
+            house = house.replace(house[0], firstletter);
+
+        // capitalize first letter after " "
+            let fullnameArr = fullname.split(" ");
+
+            for (let i = 0; i < fullnameArr.length; i++) {
+                fullnameArr[i] = fullnameArr[i][0].toUpperCase() + fullnameArr[i].substring(1);
+            }
+
+            fullname = fullnameArr.join(" ");
+
+        // capitalize first letter after "-"
+            let fullnameArr2 = fullname.split("-");
+
+            for (let i = 0; i < fullnameArr2.length; i++) {
+                fullnameArr2[i] = fullnameArr2[i][0].toUpperCase() + fullnameArr2[i].substring(1);
+            }
+
+            fullname = fullnameArr2.join("-");
+
+         // capitalize first letter after "
+            let fullnameArr3 = fullname.split(`"`);
+
+            for (let i = 0; i < fullnameArr3.length; i++) {
+                fullnameArr3[i] = fullnameArr3[i][0].toUpperCase() + fullnameArr3[i].substring(1);
+            }
+
+            fullname = fullnameArr3.join(`"`);
+
+
+// CONVERTING THEM INTO VARIABLES WE WANT
         // making first names
         if (fullname.includes(" ")) {
             firstname = fullname.substring(fullname[0], fullname.indexOf(" "));
-            firstname = firstname[0].toUpperCase()+firstname.substring(1).toLowerCase();
-            console.log(firstname);
         } else {
             firstname = fullname.substring(0);
-            firstname = firstname[0].toUpperCase()+firstname.substring(1).toLowerCase();
-            console.log(firstname);
         }
 
         // making middle names (if they have it)
-        if (fullname.includes(" ") && !fullname.lastIndexOf(" ") === fullname.indexOf(" ")) {
+        if (fullname.includes(" ") && fullname.lastIndexOf(" ") != fullname.indexOf(" ") && !fullname.includes(`"`)) {
             middlename = fullname.substring(fullname.indexOf(" ")+1, fullname.lastIndexOf(" "));
-            middlename = middlename[0].toUpperCase()+middlename.substring(1).toLowerCase();
-            console.log(middlename);
         } else {
-            middlename = undefined;
-            console.log(middlename);
+            middlename = ""
         }
 
         // making last names (if they have it)
         // hyphen cases
-        if (fullname.includes(" ") && fullname.includes("-")) {
-            let beforehyphen = fullname.substring(fullname.lastIndexOf(" ")+1, fullname.indexOf("-"))
-            let afterhyphen = fullname.substring(fullname.indexOf("-"));
-            afterhyphen[1].toUpperCase();
-            lastname = beforehyphen+afterhyphen;
-            console.log(lastname);
-        } else if (fullname.includes(" ")) {
+        if (fullname.includes(" ")) {
             lastname = fullname.substring(fullname.lastIndexOf(" ")+1);
-            lastname = lastname[0].toUpperCase()+lastname.substring(1).toLowerCase();
-            console.log(lastname);
         } else {
-            lastname = undefined;
-            console.log(lastname);
+            lastname = "";
         }
 
         // making nicknames (if they have it)
         if (fullname.includes(`"`)) {
             nickname = fullname.substring(fullname.indexOf("\"")+1, fullname.lastIndexOf("\""));
-            console.log(nickname);
         } else {
             nickname = "";
-            console.log(nickname);
         }
 
+        console.log("first name:", firstname);
+        console.log("middle name:", middlename);
+        console.log("last name:", lastname);
+        console.log("nickname:", nickname);
+        console.log("house:", house);
+        console.log("gender:", gender);
+        console.log("");
     });
 
 
