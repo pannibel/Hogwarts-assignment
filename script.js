@@ -1,11 +1,18 @@
 "use strict"
 
 let studentJSON;
+
+let fullname;
+let house;
+let gender;
+
 let firstname;
 let middlename;
 let lastname;
 let nickname;
 let firstletter;
+
+let newStudentArray;
 
 // FETCHING YAY
 
@@ -33,13 +40,10 @@ function prepareData() {
 // FOR EACH OBJECT IN THE JSON DATA:
 // read the properties of the JSON object
     studentJSON.forEach(student => {
-        /* console.log(student.fullname);
-        console.log(student.gender);
-        console.log(student.house); */
 
-        let fullname = student.fullname;
-        let gender = student.gender;
-        let house = student.house;
+        fullname = student.fullname;
+        gender = student.gender;
+        house = student.house;
 
 // GENERAL CHANGES
         // cleaning extra whitespaces
@@ -75,7 +79,7 @@ function prepareData() {
 
             fullname = fullnameArr2.join("-");
 
-         // capitalize first letter after "
+        // capitalize first letter after "
             let fullnameArr3 = fullname.split(`"`);
 
             for (let i = 0; i < fullnameArr3.length; i++) {
@@ -122,23 +126,37 @@ function prepareData() {
         console.log("house:", house);
         console.log("gender:", gender);
         console.log("");
-    });
+
+        });
 
 
+    // BUILDING A NEW OBJECT PROTOTYPE
 
-// BUILDING A NEW OBJECT PROTOTYPE
+    const Student = {
+        firstname: "",
+        middlename: "",
+        lastname: "",
+        nickname: "",
+        gender: "",
+        house: "",
+        image: "",
+    }
 
-/* const Student = {
-    firstname: "",
-    middlename: "",
-    lastname: "",
-    nickname: "",
-    gender: "",
-    house: "",
-    image: "",
-} */
+    // create a new object from prototype
+    const student = Object.create(Student);
 
-//const student = Object.create(Student);
+    // set properties on the object to the variables
+    student.firstname = firstname;
+    student.middlename = middlename;
+    student.lastname = lastname;
+    student.nickname = nickname;
+    student.gender = gender;
+    student.house = house;
+
+    // add the object to an array of data objects
+    newStudentArray = Array.from(student);
+
+    console.log(newStudentArray)
 
 
 }
