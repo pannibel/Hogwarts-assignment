@@ -121,8 +121,11 @@ function prepareData() {
         }
 
         //adding images
-        if (lastname) {
+        if (lastname && !lastname.includes("-")) {
             image = lastname.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
+        } else if (lastname.includes("-")) {
+            let afterhyphen = lastname.substring(lastname.indexOf("-")+1);
+            image = afterhyphen.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
         }
 
         console.log("first name:", firstname);
