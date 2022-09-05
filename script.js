@@ -10,6 +10,7 @@ let firstname;
 let middlename;
 let lastname;
 let nickname;
+let image;
 let firstletter;
 
 let newStudentArray;
@@ -119,12 +120,18 @@ function prepareData() {
             nickname = "";
         }
 
+        //adding images
+        if (lastname) {
+            image = lastname.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
+        }
+
         console.log("first name:", firstname);
         console.log("middle name:", middlename);
         console.log("last name:", lastname);
         console.log("nickname:", nickname);
         console.log("house:", house);
         console.log("gender:", gender);
+        console.log("image:", image)
         console.log("");
 
         });
