@@ -11,6 +11,7 @@
 // LETS START THIS S
 
 // GLOBAL OBJECTS AND VARIABLES
+let studentJSON;
 let fullname, house, gender, firstname, middlename, lastname, nickname, image, firstletter;
 let allStudents = [];
 
@@ -25,7 +26,8 @@ const Student = {
     image: "",
 };
 
-// FETCHING YAY
+
+//* FETCHING YAY
 window.addEventListener("DOMContentLoaded", event => {
     start();
 });
@@ -40,26 +42,30 @@ function start() {
 
 async function loadData() {
     const response = await fetch("https://petlatkea.dk/2021/hogwarts/students.json");
-    const studentJSON = await response.json();
+    studentJSON = await response.json();
 
     // when loaded, prepare data objects
     prepareObjects(studentJSON);
     //console.log(studentJSON);
 }
 
-function prepareObjects(jsonData) {
+function prepareObjects(studentJSON) {
     console.log("prepareObjects");
 
-    allStudents = jsonData.map(prepareObject);
+    allStudents = studentJSON.map(cleanData);
+    console.log(allStudents);
     displayList(allStudents);
 }
 
-function prepareObject(jsonObject) {
-    const student = Object.create(Student);
 
-    fullname = jsonObject.fullname;
-    gender = jsonObject.gender;
-    house = jsonObject.house;
+
+//* CLEANING THE JSON DATA
+function cleanData(object) {
+    console.log("cleanData");
+
+    fullname = object.fullname;
+    gender = object.gender;
+    house = object.house;
 
 // GENERAL CHANGES
     // cleaning extra whitespaces
@@ -108,31 +114,36 @@ function prepareObject(jsonObject) {
 // CONVERTING THEM INTO VARIABLES WE WANT
     const texts = fullname.split(" ");
 
-    // making first names and last names
-    if (fullname.includes(" ") && fullname.lastIndexOf(" ") === fullname.indexOf(" ")) {
+    // just firstname
+    if (!fullname.includes(" ")) {
         firstname = texts[0];
-        lastname = texts[1]; 
-    } else {
-        firstname = texts[0];
+        middlename = "";
+        lastname = "";
+        nickname = "";
     }
 
-    // making middle names (if they have it)
-    if (fullname.includes(" ") && fullname.lastIndexOf(" ") != fullname.indexOf(" ") && !fullname.includes(`"`)) {
+    // firstname + lastname
+    else if (fullname.includes(" ") && fullname.lastIndexOf(" ") === fullname.indexOf(" ")) {
+        firstname = texts[0];
+        middlename = "";
+        lastname = texts[1];
+        nickname = ""; 
+    }
+
+    // firstname + middlename + lastname
+    else if (fullname.includes(" ") && fullname.lastIndexOf(" ") != fullname.indexOf(" ") && !fullname.includes(`"`)) {
         firstname = texts[0];
         middlename = texts[1];
         lastname = texts[2];
-    } else {
-        middlename = "";
+        nickname = "";
     }
 
-    // making nicknames (if they have it)
-    if (fullname.includes(`"`)) {
+    // firstname + lastname + nickname
+    else if (fullname.includes(`"`)) {
         firstname = texts[0];
         nickname = texts[1];
         lastname = texts[2];
-    } else {
-        nickname = "";
-    }
+    };
 
     //adding images
     if (lastname && !lastname.includes("-")) {
@@ -141,34 +152,46 @@ function prepareObject(jsonObject) {
         let afterhyphen = lastname.substring(lastname.indexOf("-")+1);
         image = afterhyphen.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
     }
+    
+    
+    const student = Object.create(Student);
+
+        // set properties on the object to the variables
+        student.firstname = firstname;
+        student.middlename = middlename;
+        student.lastname = lastname;
+        student.nickname = nickname;
+        student.gender = gender;
+        student.house = house;
 
     return student;
 }
 
-function newData(student) {
-    // set properties on the object to the variables
-    student.firstname = firstname;
-    student.middlename = middlename;
-    student.lastname = lastname;
-    student.nickname = nickname;
-    student.gender = gender;
-    student.house = house;
+/* function prepareObject(newObject) {
+    console.log("prep");
 
-    // add the object to an array of data objects
-    allStudents = Array.from(student);
-    console.log(allStudents);
-};
+    const student = Object.create(Student);
 
-// DISPLAYING LIST OF STUDENTS
+        // set properties on the object to the variables
+        newObject.firstname = firstname;
+        newObject.middlename = middlename;
+        newObject.lastname = lastname;
+        newObject.nickname = nickname;
+        newObject.gender = gender;
+        newObject.house = house;
+
+    return student;
+}; */
+
+
+
+//* DISPLAYING LIST OF STUDENTS
 function displayList(students) {
     // TODO clear the list
     //document.querySelector("#list tbody").innerHTML = "";
 
     // ! build a new list
     //students.forEach(displayStudent);
-
-    // just for now
-    students.forEach(newData);
 }
 
 function displayStudent(student) {
