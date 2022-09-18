@@ -7,6 +7,42 @@
     <title>Hogwarts</title>
 </head>
 <body>
+    <main>
+        <h1>Hogwarts</h1>
+        <h2>Class of 1991</h2>
+
+        <div class="activity_bar">
+            <div id="search_bar"></div>
+            <div id="house_filtering">
+                <button class="filter" data-action="filter" data-filter="grif">Griffindor</button>
+                <button class="filter" data-action="filter" data-filter="sly">Slytherin</button>
+                <button class="filter" data-action="filter" data-filter="huf">Hufflepuff</button>
+                <button class="filter" data-action="filter" data-filter="rav">Ravenclaw</button>
+            </div>
+
+            <div id="filtering">
+                <button class="filter" data-action="filter" data-filter="prefects">Prefects</button>
+                <button class="filter" data-action="filter" data-filter="squad">Inquisitorial squad</button>
+                <button class="filter" data-action="filter" data-filter="expelled">Expelled</button>
+                <button class="filter" data-action="filter" data-filter="*">All</button>
+            </div>
+
+            <div id="sorting">
+                <th data-action="sort" data-sort-direction="asc" data-sort="first_name">Firstname</th>
+                <th data-action="sort" data-sort-direction="asc" data-sort="last_name">Lastname</th>
+                <th data-action="sort" data-sort-direction="asc" data-sort="house">House</th>
+            </div>
+        </div>
+
+        <div class="student_list">
+            <template id="student">
+                <img src="" id="student_photo" alt="student photo">
+                <h3 id="fullname"></h3>
+                <p id="prefect_badge"></p>
+                <p id="inq_badge"></p>
+            </template>
+        </div>
+    </main>
     
 </body>
 <script src="script.js"></script>

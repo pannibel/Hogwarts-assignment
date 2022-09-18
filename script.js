@@ -167,24 +167,6 @@ function cleanData(object) {
     return student;
 }
 
-/* function prepareObject(newObject) {
-    console.log("prep");
-
-    const student = Object.create(Student);
-
-        // set properties on the object to the variables
-        newObject.firstname = firstname;
-        newObject.middlename = middlename;
-        newObject.lastname = lastname;
-        newObject.nickname = nickname;
-        newObject.gender = gender;
-        newObject.house = house;
-
-    return student;
-}; */
-
-
-
 //* DISPLAYING LIST OF STUDENTS
 function displayList(students) {
     // TODO clear the list
