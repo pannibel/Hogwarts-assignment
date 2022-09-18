@@ -14,6 +14,11 @@
 let studentJSON;
 let fullname, house, gender, firstname, middlename, lastname, nickname, image, firstletter;
 let allStudents = [];
+const settings = {
+    filterBy: "all",
+    sortBy: "name",
+    sortDir: "asc",
+};
 
 // The prototype for all students: 
 const Student = {
@@ -26,6 +31,20 @@ const Student = {
     image: "",
 };
 
+// Eventlisteners
+
+// BUTTONS
+function registerButtons() {
+    document.querySelectorAll("[data-action= 'housefilter']").forEach(button =>
+        button.addEventListener("click", selectHouse));
+
+/*     document.querySelectorAll("[data-action= 'filter']").forEach(button =>
+        button.addEventListener("click", selectFilter));
+
+    document.querySelectorAll("[data-action= 'sort']").forEach(button =>
+        button.addEventListener("click", selectSort)); */
+}
+
 
 //* FETCHING YAY
 window.addEventListener("DOMContentLoaded", event => {
@@ -36,7 +55,7 @@ function start() {
     console.log("start");
 
     // ! later
-    //registerButtons();
+    registerButtons();
     loadData();
 }
 
@@ -148,6 +167,7 @@ function cleanData(object) {
     //adding images
     if (lastname && !lastname.includes("-")) {
         image = lastname.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
+
     } else if (lastname.includes("-")) {
         let afterhyphen = lastname.substring(lastname.indexOf("-")+1);
         image = afterhyphen.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
@@ -168,24 +188,146 @@ function cleanData(object) {
     return student;
 }
 
+
+
+//* BIG BUILDLIST FUNCTION WITH FILTERING AND SORTING
+
+// HOUSE FILTERING
+function selectHouse(event) {
+    const housefilter = event.target.dataset.filter;
+    console.log(`User selected ${housefilter}`);
+    setHouse(housefilter);
+}
+
+function setHouse(filter) {
+    settings.filterBy = filter;
+    buildList();
+}
+
+function filterHouse(houseList) {
+    //let filteredList = allAnimals;
+    if (settings.filterBy === "gryf"){
+        houseList = allStudents.filter(isGryf);
+    };
+    if (settings.filterBy === "sly"){
+        houseList = allStudents.filter(isSly);
+    };
+    if (settings.filterBy === "huf"){
+        houseList = allStudents.filter(isHuf);
+    };
+    if (settings.filterBy === "rav"){
+        houseList = allStudents.filter(isRav);
+    };
+    
+    return houseList;
+}
+
+function isGryf(student) {
+    return student.house === "Gryffindor"
+}
+
+function isSly(student) {
+    return student.house === "Slytherin"
+}
+
+function isHuf(student) {
+    return student.house === "Hufflepuff"
+}
+
+function isRav(student) {
+    return student.house === "Ravenclaw"
+}
+
+
+// SORTING
+function selectSort(event) {
+    const sortBy = event.target.dataset.sort;
+    const sortDir = event.target.dataset.sortDirection;
+
+    // toggle the direction
+    if (sortDir === "asc") {
+        event.target.dataset.sortDirection = "desc";
+    } else {
+        event.target.dataset.sortDirection = "asc";
+    }
+
+    console.log(`User sorted by ${sortBy} - ${sortDir}`);
+    setSort(sortBy, sortDir);
+}  
+
+function setSort(sortBy, sortDir) {
+    settings.sortBy = sortBy;
+    settings.sortDir = sortDir;
+
+    buildList();
+}
+
+function sortList(sortedList) {
+   // let sortedList = allAnimals;
+
+    let direction = 1;
+    if (settings.sortDir === "desc") {
+        direction = -1;
+    } else {
+        direction = 1;
+    }
+
+    sortedList = sortedList.sort(sortByProperty);
+
+    function sortByProperty(animalA, animalB) {
+        if (animalA[settings.sortBy] < animalB[settings.sortBy]) {
+            return 1 * direction;
+        } else {
+            return -1 * direction;
+        }
+    }
+/* 
+    if (sortBy === "name") {
+        sortedList = allAnimals.sort(sortByName);
+    };
+    if (sortBy === "type") {
+        sortedList = allAnimals.sort(sortByType);
+    };
+    if (sortBy === "desc") {
+        sortedList = allAnimals.sort(sortByDesc);
+    };
+    if (sortBy === "age") {
+        sortedList = allAnimals.sort(sortByAge);
+    }; */
+
+    return sortedList;
+};
+
+
+//BUILDLIST
+function buildList() {
+    const currentList = filterHouse(allStudents);
+   // const sortedList1 = sortList(currentList1);
+
+    displayList(currentList);
+}
+
+
+
+
 //* DISPLAYING LIST OF STUDENTS
 function displayList(students) {
     // TODO clear the list
-    document.querySelector("#list").innerHTML = "";
+    document.querySelector("#student_list").innerHTML = "";
 
     // ! build a new list
     students.forEach(displayStudent);
 }
 
 function displayStudent(student) {
-    // TODO create clone
-    const clone = document.querySelector("#student").content.cloneNode(true);
+    // create clone
+    const clone = document.querySelector("#template").content.cloneNode(true);
     
-    // TODO set clone data
-    clone.querySelector("#photo").src = `images/${student.image}`;
-    clone.querySelector("#fullname").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
-    clone.querySelector("#house").textContent = student.house;
+    // set clone data
+    clone.querySelector("[data-field=photo]").src = `images/${student.image}`;
+    clone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
+    clone.querySelector("[data-field=house]").textContent = student.house;
 
-    // TODO append clone to list
-    document.querySelector("#list").appendChild(clone);
+    // append clone to list
+    document.querySelector("#student_list").appendChild(clone);
 }

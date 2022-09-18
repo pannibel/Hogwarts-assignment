@@ -4,49 +4,72 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Hogwarts</title>
 </head>
 <body>
-    <main>
+    <header>
         <h1>Hogwarts</h1>
         <h2>Class of 1991</h2>
+    </header>
+
+    <main>
 
         <div class="activity_bar">
-            <div id="search_bar"></div>
-            <div id="house_filtering">
-                <button class="filter" data-action="filter" data-filter="grif">Griffindor</button>
-                <button class="filter" data-action="filter" data-filter="sly">Slytherin</button>
-                <button class="filter" data-action="filter" data-filter="huf">Hufflepuff</button>
-                <button class="filter" data-action="filter" data-filter="rav">Ravenclaw</button>
+            <section id="searching">
+                <div id="search_bar">
+                    <label for="input"></label>
+                    <input type="text" name="input" id="input" placeholder="write something here haha">
+                    <button id="search_button">Search</button>
+                </div>
+            </section>
+
+            <section id="house_filtering">
+                <div id="house_filter">
+                    <button class="filter" data-action="housefilter" data-filter="all">All</button>
+                    <button class="filter" data-action="housefilter" data-filter="gryf">Gryffindor</button>
+                    <button class="filter" data-action="housefilter" data-filter="sly">Slytherin</button>
+                    <button class="filter" data-action="housefilter" data-filter="huf">Hufflepuff</button>
+                    <button class="filter" data-action="housefilter" data-filter="rav">Ravenclaw</button>
+                </div>
+            </section>
+
+        <section id="filtering_and_sorting">
+            <div id="filter">
+                <select name="options" id="options">
+                    <option value="1" class="filter" data-action="filter" data-filter="*">All</option>
+                    <option value="2" class="filter" data-action="filter" data-filter="prefects">Prefects</option>
+                    <option value="3" class="filter" data-action="filter" data-filter="squad">Inquisitorial squad</option>
+                    <option value="4" class="filter" data-action="filter" data-filter="expelled">Expelled</option>
+                </select>
             </div>
 
-            <div id="filtering">
-                <button class="filter" data-action="filter" data-filter="prefects">Prefects</button>
-                <button class="filter" data-action="filter" data-filter="squad">Inquisitorial squad</button>
-                <button class="filter" data-action="filter" data-filter="expelled">Expelled</button>
-                <button class="filter" data-action="filter" data-filter="*">All</button>
+            <div id="sort">
+                <label id="sort_label">Sort by</label>
+                <button data-action="sort" data-sort-direction="asc" data-sort="first_name">Firstname</button>
+                <button data-action="sort" data-sort-direction="asc" data-sort="last_name">Lastname</button>
+                <button data-action="sort" data-sort-direction="asc" data-sort="house">House</button>
             </div>
-
-            <div id="sorting">
-                <th data-action="sort" data-sort-direction="asc" data-sort="first_name">Firstname</th>
-                <th data-action="sort" data-sort-direction="asc" data-sort="last_name">Lastname</th>
-                <th data-action="sort" data-sort-direction="asc" data-sort="house">House</th>
-            </div>
+        </section>
         </div>
 
-    <table id="list">
 
-    </table>
+        <table id="student_list">
+    <!-- template clones come here -->
+        </table>
 
-        <div id="student_list">
-            <template id="student">
-                <img src="" id="photo" alt="student photo">
-                <h3 id="fullname"></h3>
-                <h4 id="house"></h4>
-                <p id="prefect_badge"></p>
-                <p id="inq_badge"></p>
-            </template>
-        </div>
+                <template id="template">
+                    <div class="student">
+                        <img src="" id="photo" alt="student photo" data-field="photo">
+                        <div id="name_and_house">
+                            <h3 id="fullname" data-field="name"></h3>
+                            <h4 id="house" data-field="house"></h4>
+                        </div>
+                        <p id="prefect_badge" data-field="p_badge"></p>
+                        <p id="inq_badge" data-field="i_badge"></p>
+                    </div>
+                </template>
+
     </main>
     
 </body>

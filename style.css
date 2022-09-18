@@ -1,0 +1,72 @@
+/* GENERAL VALUES
+
+
+
+
+/* JUST SOME STYLING FOR TESTING */
+
+header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.activity_bar {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 10rem;
+}
+
+#searching {
+    display: flex;
+    align-items: center;
+}
+
+#house_filtering {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+#filtering_and_sorting {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+#sort {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+button.filter {
+    width: 5rem;
+    
+}
+
+
+#student_list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+    margin: 0 30rem 0 30rem;
+}
+
+.student {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+}
