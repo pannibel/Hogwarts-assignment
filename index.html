@@ -26,7 +26,7 @@
 
             <section id="house_filtering">
                 <div id="house_filter">
-                    <button class="filter" data-action="housefilter" data-filter="all">All</button>
+                    <button class="filter" data-action="housefilter" data-filter="*">All houses</button>
                     <button class="filter" data-action="housefilter" data-filter="gryf">Gryffindor</button>
                     <button class="filter" data-action="housefilter" data-filter="sly">Slytherin</button>
                     <button class="filter" data-action="housefilter" data-filter="huf">Hufflepuff</button>
@@ -37,7 +37,7 @@
         <section id="filtering_and_sorting">
             <div id="filter">
                 <select name="options" id="options">
-                    <option value="1" class="filter" data-action="filter" data-filter="*">All</option>
+                    <option value="1" class="filter" data-action="filter" data-filter="*">No filter selected</option>
                     <option value="2" class="filter" data-action="filter" data-filter="prefects">Prefects</option>
                     <option value="3" class="filter" data-action="filter" data-filter="squad">Inquisitorial squad</option>
                     <option value="4" class="filter" data-action="filter" data-filter="expelled">Expelled</option>
@@ -52,6 +52,36 @@
             </div>
         </section>
         </div>
+
+        <!-- pop up time -->
+        <div id="pop_up" class="">
+            <!-- template of one student comes here -->
+        </div>
+    
+        <template id="popup_template">
+            <div class="popup_student">
+                <img src="" id="photo" alt="student photo" data-field="photo">
+                <div id="name_and_house">
+                    <h3 id="fullname" data-field="name"></h3>
+                    <h3 id="nickname" data-field="nickname"></h3>
+                    <h4 id="house" data-field="house"></h4>
+                    <h4 id="crest"></h4>
+                </div>
+                <div id="badges">
+                    <p id="prefect_badge" data-field="p_badge"></p>
+                    <p id="inq_badge" data-field="i_badge"></p>
+                </div>
+                <div id="badge_buttons">
+                    <button id="p_button">Select as prefect</button>
+                    <button id="i_button">Add to inquisitorial squad</button>
+                </div>
+                <div id="expel">
+                    <button id="expel_button">Expel</button>
+                </div>
+                <div id="blood_status"></div>
+            </div>
+        </template>
+
 
 
         <table id="student_list">

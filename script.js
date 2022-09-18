@@ -6,7 +6,7 @@
 // ?
 // TODO
 
-// * STAGE: DISPLAYING THE LIST OF STUDENTS, WITH SORTING, FILTERING, SEARCHING, AND POP-UP
+// * STAGE: DISPLAYING THE LIST OF STUDENTS (done), WITH SORTING (done), FILTERING (done), SEARCHING, AND POP-UP
 
 // LETS START THIS S
 
@@ -14,6 +14,7 @@
 let studentJSON;
 let fullname, house, gender, firstname, middlename, lastname, nickname, image, firstletter;
 let allStudents = [];
+let index = 1;
 const settings = {
     filterBy: "all",
     sortBy: "name",
@@ -39,10 +40,10 @@ function registerButtons() {
         button.addEventListener("click", selectHouse));
 
 /*     document.querySelectorAll("[data-action= 'filter']").forEach(button =>
-        button.addEventListener("click", selectFilter));
+        button.addEventListener("click", selectFilter)); */
 
     document.querySelectorAll("[data-action= 'sort']").forEach(button =>
-        button.addEventListener("click", selectSort)); */
+        button.addEventListener("click", selectSort));
 }
 
 
@@ -171,6 +172,8 @@ function cleanData(object) {
     } else if (lastname.includes("-")) {
         let afterhyphen = lastname.substring(lastname.indexOf("-")+1);
         image = afterhyphen.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
+    } else if (!lastname) {
+        image = "";
     }
     
     
@@ -184,6 +187,7 @@ function cleanData(object) {
         student.gender = gender;
         student.house = house;
         student.image = image;
+        student.index = index++;
 
     return student;
 }
@@ -263,48 +267,64 @@ function setSort(sortBy, sortDir) {
 }
 
 function sortList(sortedList) {
-   // let sortedList = allAnimals;
 
     let direction = 1;
-    if (settings.sortDir === "desc") {
+    if (settings.sortDir === "asc") {
         direction = -1;
     } else {
         direction = 1;
     }
 
-    sortedList = sortedList.sort(sortByProperty);
 
-    function sortByProperty(animalA, animalB) {
-        if (animalA[settings.sortBy] < animalB[settings.sortBy]) {
-            return 1 * direction;
-        } else {
-            return -1 * direction;
-        }
-    }
-/* 
-    if (sortBy === "name") {
-        sortedList = allAnimals.sort(sortByName);
+    if (settings.sortBy === "first_name") {
+        sortedList = sortedList.sort(sortByFirstname)
     };
-    if (sortBy === "type") {
-        sortedList = allAnimals.sort(sortByType);
+
+    if (settings.sortBy === "last_name") {
+        sortedList = sortedList.sort(sortByLastname);
     };
-    if (sortBy === "desc") {
-        sortedList = allAnimals.sort(sortByDesc);
+
+    if (settings.sortBy === "house") {
+        sortedList = sortedList.sort(sortByHouse);
     };
-    if (sortBy === "age") {
-        sortedList = allAnimals.sort(sortByAge);
-    }; */
+    
+
+    function sortByFirstname(studentA, studentB) {
+        if (studentA.firstname < studentB.firstname) {
+                return 1 * direction;
+            } else {
+                return -1 * direction;
+            }
+    };
+    
+    function sortByLastname(studentA, studentB) {
+        if (studentA.lastname < studentB.lastname) {
+                return 1 * direction;
+            } else {
+                return -1 * direction;
+            }
+    };
+
+    function sortByHouse(studentA, studentB) {
+        if (studentA.house < studentB.house) {
+                return 1 * direction;
+            } else {
+                return -1 * direction;
+            }
+    };
 
     return sortedList;
-};
+} 
+
+
 
 
 //BUILDLIST
 function buildList() {
     const currentList = filterHouse(allStudents);
-   // const sortedList1 = sortList(currentList1);
+    const sortedList = sortList(currentList);
 
-    displayList(currentList);
+    displayList(sortedList);
 }
 
 
@@ -327,7 +347,29 @@ function displayStudent(student) {
     clone.querySelector("[data-field=photo]").src = `images/${student.image}`;
     clone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
     clone.querySelector("[data-field=house]").textContent = student.house;
+    clone.querySelector("div.student").setAttribute("id", `student${student.index}`);
 
     // append clone to list
     document.querySelector("#student_list").appendChild(clone);
+
+
+    // POP-UP DISPLAY
+    
+    // create clone
+    const popupClone = document.querySelector("#popup_template").content.cloneNode(true);
+        
+    // set clone data
+    popupClone.querySelector("[data-field=photo]").src = `images/${student.image}`;
+    popupClone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
+    popupClone.querySelector("[data-field=nickname]").textContent = `${student.nickname}`;
+    popupClone.querySelector("[data-field=house]").textContent = student.house;
+    popupClone.querySelector("div.popup_student").setAttribute("id", `student${student.index}`);
+
+    // append clone to list
+    document.querySelector("#pop_up").appendChild(clone);
+
 }
+
+
+
+//* POP UP OF STUDENT
