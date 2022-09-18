@@ -163,6 +163,7 @@ function cleanData(object) {
         student.nickname = nickname;
         student.gender = gender;
         student.house = house;
+        student.image = image;
 
     return student;
 }
@@ -170,24 +171,21 @@ function cleanData(object) {
 //* DISPLAYING LIST OF STUDENTS
 function displayList(students) {
     // TODO clear the list
-    //document.querySelector("#list tbody").innerHTML = "";
+    document.querySelector("#list").innerHTML = "";
 
     // ! build a new list
-    //students.forEach(displayStudent);
+    students.forEach(displayStudent);
 }
 
 function displayStudent(student) {
     // TODO create clone
-    // const clone = document.querySelector("template #student").content.cloneNode(true);
+    const clone = document.querySelector("#student").content.cloneNode(true);
     
     // TODO set clone data
-    /* clone.querySelector("[data-field=firstname]").textContent = student.firstname;
-    clone.querySelector("[data-field=middlename]").textContent = student.middlename;
-    clone.querySelector("[data-field=lastname]").textContent = student.lastname;
-    clone.querySelector("[data-field=nickname]").textContent = student.nickname;
-    clone.querySelector("[data-field=gender]").textContent = student.gender;
-    clone.querySelector("[data-field=house]").textContent = student.house;
- */
+    clone.querySelector("#photo").src = `images/${student.image}`;
+    clone.querySelector("#fullname").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
+    clone.querySelector("#house").textContent = student.house;
+
     // TODO append clone to list
-    // document.querySelector("#list tbody").appendChild( clone );
+    document.querySelector("#list").appendChild(clone);
 }
