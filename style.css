@@ -1,6 +1,8 @@
-/* GENERAL VALUES
+/* GENERAL VALUES */
 
-
+.hidden {
+    display: none;
+}
 
 
 /* JUST SOME STYLING FOR TESTING */
@@ -69,4 +71,20 @@ button.filter {
     justify-content: space-around;
     align-items: center;
     gap: 2rem;
+}
+
+
+
+/* POP-UP TIME */
+.container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-content: center;
+}
+
+#pop_up {
+    display: block;
+    background-color: beige;
+    padding: 2rem;
 }

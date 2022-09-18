@@ -19,6 +19,7 @@ const settings = {
     filterBy: "all",
     sortBy: "name",
     sortDir: "asc",
+    selStudent: "",
 };
 
 // The prototype for all students: 
@@ -55,7 +56,7 @@ window.addEventListener("DOMContentLoaded", event => {
 function start() {
     console.log("start");
 
-    // ! later
+    // later
     registerButtons();
     loadData();
 }
@@ -75,6 +76,10 @@ function prepareObjects(studentJSON) {
     allStudents = studentJSON.map(cleanData);
     console.log(allStudents);
     displayList(allStudents);
+    popupList(allStudents);
+
+    document.querySelectorAll(".student").forEach(el => 
+        el.addEventListener("click", selectStudent));
 }
 
 
@@ -332,10 +337,10 @@ function buildList() {
 
 //* DISPLAYING LIST OF STUDENTS
 function displayList(students) {
-    // TODO clear the list
+    // clear the list
     document.querySelector("#student_list").innerHTML = "";
 
-    // ! build a new list
+    // build a new list
     students.forEach(displayStudent);
 }
 
@@ -351,25 +356,45 @@ function displayStudent(student) {
 
     // append clone to list
     document.querySelector("#student_list").appendChild(clone);
-
-
-    // POP-UP DISPLAY
-    
-    // create clone
-    const popupClone = document.querySelector("#popup_template").content.cloneNode(true);
-        
-    // set clone data
-    popupClone.querySelector("[data-field=photo]").src = `images/${student.image}`;
-    popupClone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
-    popupClone.querySelector("[data-field=nickname]").textContent = `${student.nickname}`;
-    popupClone.querySelector("[data-field=house]").textContent = student.house;
-    popupClone.querySelector("div.popup_student").setAttribute("id", `student${student.index}`);
-
-    // append clone to list
-    document.querySelector("#pop_up").appendChild(clone);
-
 }
 
 
 
 //* POP UP OF STUDENT
+function popupList(students) {
+    // clear the list
+    document.querySelector("#pop_up").innerHTML = "";
+
+    // build a new list
+    students.forEach(popupStudent);
+}
+
+function popupStudent(student) {
+       // create clone
+       const popupClone = document.querySelector("#popup_template").content.cloneNode(true);
+        
+       // set clone data
+       popupClone.querySelector("[data-field=photo]").src = `images/${student.image}`;
+       popupClone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
+       popupClone.querySelector("[data-field=nickname]").textContent = `${student.nickname}`;
+       popupClone.querySelector("[data-field=house]").textContent = student.house;
+       popupClone.querySelector(".popup_student").setAttribute("id", `popup_student${student.index}`);
+       popupClone.querySelector(".popup_student").setAttribute("class", "hidden");
+   
+       // append clone to list
+       document.querySelector("#pop_up").appendChild(popupClone);   
+}
+
+function selectStudent(event) {
+    const selectedStudent = event.target.dataset.index;
+
+    console.log(`User selected ${selectedStudent}`);
+    showPopup(selectedStudent);
+}
+
+function showPopup(student) {
+    console.log(`student ${student.index}`);
+
+    document.querySelector(`#student${student.index}`).addEventListener("click", () => {
+        document.querySelector(`#popup_student${student.index}`).classList.remove("hidden")});
+}
