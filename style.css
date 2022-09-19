@@ -4,6 +4,9 @@
     display: none;
 }
 
+html {
+    margin: none;
+}
 
 /* JUST SOME STYLING FOR TESTING */
 
@@ -76,17 +79,32 @@ button.filter {
 
 
 /* POP-UP TIME */
-.container {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    display: grid;
+#container {
+    position: fixed;
+    top: 0%;
+    left: 0%;
     place-content: center;
+    background-color:rgba(0, 0, 0, 0.291);
+    height: 100vh;
+    width: 100vw;
+    z-index: 2;
 }
 
 #pop_up {
-    display: block;
-    background-color: beige;
+    display: grid;
     padding: 2rem;
+}
+
+.middle {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+    width: 40%;
+    top: 25%;
+    justify-content: center;
+    align-items: center;
+    background-color: beige;
     z-index: 1;
+    justify-self: center;
 }

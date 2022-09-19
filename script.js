@@ -69,8 +69,9 @@ async function loadData() {
 
     // when loaded, prepare data objects
     prepareObjects(studentJSON);
-    //console.log(studentJSON);
-    document.querySelectorAll("#fullname").forEach(el => el.addEventListener("click", selectStudent));
+
+    //closing the pop-up
+    document.querySelector("#container").addEventListener("click", closePopup);
 }
 
 function prepareObjects(studentJSON) {
@@ -343,6 +344,7 @@ function displayList(students) {
 
     // build a new list
     students.forEach(displayStudent);
+    console.log(students);
 }
 
 function displayStudent(student) {
@@ -354,9 +356,13 @@ function displayStudent(student) {
     clone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
     clone.querySelector("[data-field=house]").textContent = student.house;
     clone.querySelector("div.student").setAttribute("id", `student${student.index}`);
+    //clone.querySelector("[data-field=name]").addEventListener("click", selectStudent);
 
     // append clone to list
     document.querySelector("#student_list").appendChild(clone);
+    document.querySelectorAll("#fullname").forEach(button => {
+        button.addEventListener("click", selectStudent)
+    })
 }
 
 
@@ -391,17 +397,24 @@ function selectStudent(event) {
     const selectedStudent = event.target.parentElement.parentElement.id;
     console.log(`User selected ${selectedStudent}`);
 
-    showPopup(selectedStudent);
+    setStudent(selectedStudent);
 }
 
-function showPopup(student) {
+function setStudent(student) {
     console.log(student);
 
     let id = student.substring(7);
     console.log(id);
 
     document.querySelector(`#popup_student${id}`).classList.remove("hidden");
+    document.querySelector(`#popup_student${id}`).classList.add("middle");
+    document.querySelector("#container").classList.remove("hidden");
 
-   /*  document.querySelector(`#student${student.index}`).addEventListener("click", () => {
-        document.querySelector(`#popup_student${student.index}`).classList.remove("hidden")}); */
+}
+
+// close pop-up
+function closePopup() {
+    document.querySelector("#pop_up").classList.add("hidden");
+    document.querySelector("#pop_up").classList.remove("middle");
+    document.querySelector("#container").classList.add("hidden");
 }
