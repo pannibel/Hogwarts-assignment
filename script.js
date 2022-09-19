@@ -33,7 +33,8 @@ const Student = {
     image: "",
 };
 
-// Eventlisteners
+
+//? EVENTLISTENERS
 
 // BUTTONS
 function registerButtons() {
@@ -46,6 +47,7 @@ function registerButtons() {
     document.querySelectorAll("[data-action= 'sort']").forEach(button =>
         button.addEventListener("click", selectSort));
 }
+
 
 
 //* FETCHING YAY
@@ -68,6 +70,7 @@ async function loadData() {
     // when loaded, prepare data objects
     prepareObjects(studentJSON);
     //console.log(studentJSON);
+    document.querySelectorAll("#fullname").forEach(el => el.addEventListener("click", selectStudent));
 }
 
 function prepareObjects(studentJSON) {
@@ -77,10 +80,8 @@ function prepareObjects(studentJSON) {
     console.log(allStudents);
     displayList(allStudents);
     popupList(allStudents);
-
-    document.querySelectorAll(".student").forEach(el => 
-        el.addEventListener("click", selectStudent));
 }
+
 
 
 
@@ -385,16 +386,22 @@ function popupStudent(student) {
        document.querySelector("#pop_up").appendChild(popupClone);   
 }
 
-function selectStudent(event) {
-    const selectedStudent = event.target.dataset.index;
 
+function selectStudent(event) {
+    const selectedStudent = event.target.parentElement.parentElement.id;
     console.log(`User selected ${selectedStudent}`);
+
     showPopup(selectedStudent);
 }
 
 function showPopup(student) {
-    console.log(`student ${student.index}`);
+    console.log(student);
 
-    document.querySelector(`#student${student.index}`).addEventListener("click", () => {
-        document.querySelector(`#popup_student${student.index}`).classList.remove("hidden")});
+    let id = student.substring(7);
+    console.log(id);
+
+    document.querySelector(`#popup_student${id}`).classList.remove("hidden");
+
+   /*  document.querySelector(`#student${student.index}`).addEventListener("click", () => {
+        document.querySelector(`#popup_student${student.index}`).classList.remove("hidden")}); */
 }
