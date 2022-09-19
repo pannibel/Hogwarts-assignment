@@ -6,7 +6,7 @@
 // ?
 // TODO
 
-// * STAGE: DISPLAYING THE LIST OF STUDENTS (done), WITH SORTING (done), FILTERING (done), SEARCHING, AND POP-UP
+// * STAGE: DISPLAYING THE LIST OF STUDENTS (done), WITH SORTING (done), FILTERING (done), SEARCHING, AND POP-UP (done)
 
 // LETS START THIS S
 
@@ -15,11 +15,12 @@ let studentJSON;
 let fullname, house, gender, firstname, middlename, lastname, nickname, image, firstletter;
 let allStudents = [];
 let index = 1;
+let id;
 const settings = {
     filterBy: "all",
     sortBy: "name",
     sortDir: "asc",
-    selStudent: "",
+    searchBy: "",
 };
 
 // The prototype for all students: 
@@ -46,6 +47,8 @@ function registerButtons() {
 
     document.querySelectorAll("[data-action= 'sort']").forEach(button =>
         button.addEventListener("click", selectSort));
+
+    document.querySelector("#search_button").addEventListener("click", receiveInput);
 }
 
 
@@ -336,6 +339,41 @@ function buildList() {
 
 
 
+//* SEARCHING
+function receiveInput() {
+    let input = document.querySelector("#input").value;
+    console.log(input);
+
+    setSearch(input);
+}
+
+function setSearch(input) {
+    settings.searchBy = input;
+    
+    searchResults();
+}
+
+function findResults(searchedStudents) {
+
+    searchedStudents = allStudents.filter(findMe);
+
+    function findMe(student) {
+        return Object.values(student).includes(settings.searchBy);
+    }
+
+
+    console.log(searchedStudents);
+    return searchedStudents;
+}
+
+function searchResults() {
+
+    const searchedList = findResults(allStudents);
+    displayList(searchedList);
+}
+
+
+
 
 //* DISPLAYING LIST OF STUDENTS
 function displayList(students) {
@@ -398,23 +436,27 @@ function selectStudent(event) {
     console.log(`User selected ${selectedStudent}`);
 
     setStudent(selectedStudent);
+    openPopup(setStudent);
 }
 
 function setStudent(student) {
     console.log(student);
 
-    let id = student.substring(7);
+    id = student.substring(7);
     console.log(id);
 
+    return id;
+}
+
+function openPopup() {
     document.querySelector(`#popup_student${id}`).classList.remove("hidden");
     document.querySelector(`#popup_student${id}`).classList.add("middle");
     document.querySelector("#container").classList.remove("hidden");
-
 }
 
 // close pop-up
 function closePopup() {
-    document.querySelector("#pop_up").classList.add("hidden");
-    document.querySelector("#pop_up").classList.remove("middle");
+    document.querySelector(`#popup_student${id}`).classList.add("hidden");
+    document.querySelector(`#popup_student${id}`).classList.remove("middle");
     document.querySelector("#container").classList.add("hidden");
 }
