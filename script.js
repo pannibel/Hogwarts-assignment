@@ -537,7 +537,6 @@ function findStudent(allStudents) {
 
 function checkIfPrefect(foundStudent) {
     console.log("checkIfPrefect");
-    console.log(foundStudent);
 
     if (foundStudent.isPrefect) {
         console.log(`${foundStudent.firstname} ${foundStudent.lastname} is prefect of ${foundStudent.house}`);
@@ -553,19 +552,15 @@ function checkHousePrefects(student) {
 
     if (student.house === "Gryffindor") {
         housePrefects = GryffindorPrefects;
-        console.log("GryffindorPrefects", housePrefects);
     };
     if (student.house === "Slytherin") {
         housePrefects = SlytherinPrefects;
-        console.log("SlytherinPrefects", housePrefects);
     };
     if (student.house === "Hufflepuff") {
-        housePrefects = HufflepuffPrefects;
-        console.log("HufflepuffPrefects", housePrefects);        
+        housePrefects = HufflepuffPrefects;     
     };
     if (student.house === "Ravenclaw") {
         housePrefects = RavenclawPrefects;
-        console.log("RavenclawPrefects", housePrefects);
     };
 
 
@@ -582,35 +577,34 @@ function addToPrefects(student, housePrefects) {
 
     housePrefects.push(student);
     student.isPrefect = true;
-    console.log(`${student.firstname} ${student.lastname} has been added to ${student.house}Prefects`)
+    console.log(`${student.firstname} ${student.lastname} has been added to ${student.house} Prefects`)
     console.log(housePrefects);
 }
 
 function removeFromPrefects(student) {
-    console.log("removeFromPrefects")
-    console.log(student);
+    console.log("removeFromPrefects");
 
     if (student.house === "Gryffindor") {
         housePrefects = GryffindorPrefects;
-        console.log("GryffindorPrefects", housePrefects);
     };
     if (student.house === "Slytherin") {
         housePrefects = SlytherinPrefects;
-        console.log("SlytherinPrefects", housePrefects);
     };
     if (student.house === "Hufflepuff") {
-        housePrefects = HufflepuffPrefects;
-        console.log("HufflepuffPrefects", housePrefects);        
+        housePrefects = HufflepuffPrefects;    
     };
     if (student.house === "Ravenclaw") {
         housePrefects = RavenclawPrefects;
-        console.log("RavenclawPrefects", housePrefects);
     };
 
-    
+    for(let i = 0; i < housePrefects.length; i++){
+        if (housePrefects[i] === student) {  
+            housePrefects.splice(i, 1); 
+        }
+    };
 
     student.isPrefect = false;
-    console.log(`${student.firstname} ${student.lastname} has been removed from ${student.house}Prefects`)
+    console.log(`${student.firstname} ${student.lastname} has been removed from ${student.house} Prefects`)
     console.log(housePrefects);
 }
 
