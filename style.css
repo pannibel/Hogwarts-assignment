@@ -68,6 +68,10 @@ button.filter {
     margin: 0 30rem 0 30rem;
 }
 
+#displayedNumber {
+    position: relative;
+}
+
 .student {
     display: flex;
     flex-direction: row;

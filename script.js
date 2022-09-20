@@ -6,7 +6,7 @@
 // ?
 // TODO
 
-// * STAGE: DISPLAYING THE LIST OF STUDENTS (done), WITH SORTING (done), FILTERING (done), SEARCHING, AND POP-UP (done)
+// * STAGE: DISPLAYING THE LIST OF STUDENTS (done), WITH SORTING (done), FILTERING (done), SEARCHING (done), POP-UP (done), DISPLAYED STUDENT NR
 
 // LETS START THIS S
 
@@ -14,6 +14,7 @@
 let studentJSON;
 let fullname, house, gender, firstname, middlename, lastname, nickname, image, firstletter;
 let allStudents = [];
+let studentNumber;
 let index = 1;
 let id;
 const settings = {
@@ -51,6 +52,19 @@ function registerButtons() {
     document.querySelector("#search_button").addEventListener("click", receiveInput);
 }
 
+// making the input field search on enter key press
+function enterKey() {
+    let inputField = document.getElementById("input");
+
+    inputField.addEventListener("keypress", event => {
+        if (event.key === "Enter") {
+            console.log("enterkey");
+            document.querySelector("#search_button").click();
+        }
+    })
+}
+
+
 
 
 //* FETCHING YAY
@@ -63,6 +77,7 @@ function start() {
 
     // later
     registerButtons();
+    enterKey();
     loadData();
 }
 
@@ -339,6 +354,7 @@ function buildList() {
 
 
 
+
 //* SEARCHING
 function receiveInput() {
     let input = document.querySelector("#input").value;
@@ -356,9 +372,12 @@ function setSearch(input) {
 function findResults(searchedStudents) {
 
     searchedStudents = allStudents.filter(findMe);
+    const lowercaseSearchBy = settings.searchBy;
 
     function findMe(student) {
-        return Object.values(student).includes(settings.searchBy);
+        let stringvalues = Object.values(student).toString();
+        stringvalues = stringvalues.toLowerCase();
+        return stringvalues.includes(settings.searchBy);
     }
 
 
@@ -382,7 +401,12 @@ function displayList(students) {
 
     // build a new list
     students.forEach(displayStudent);
-    console.log(students);
+
+    // updating the displayed students nr
+    studentNumber = students.length;
+    let displayNumber = document.getElementById("displayedNumber");
+    displayNumber.textContent = `${studentNumber} results`;
+    document.querySelector("#student_list").appendChild(displayNumber);
 }
 
 function displayStudent(student) {
@@ -398,6 +422,8 @@ function displayStudent(student) {
 
     // append clone to list
     document.querySelector("#student_list").appendChild(clone);
+
+    // eventlistener for opening the pop-up
     document.querySelectorAll("#fullname").forEach(button => {
         button.addEventListener("click", selectStudent)
     })
