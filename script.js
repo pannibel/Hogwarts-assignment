@@ -406,7 +406,6 @@ function displayList(students) {
     studentNumber = students.length;
     let displayNumber = document.getElementById("displayedNumber");
     displayNumber.textContent = `${studentNumber} results`;
-    document.querySelector("#student_list").appendChild(displayNumber);
 }
 
 function displayStudent(student) {

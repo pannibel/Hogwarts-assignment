@@ -57,6 +57,18 @@ button.filter {
     
 }
 
+#dn_container {
+    position: relative;
+    display: flex;
+    place-content: center;
+    margin: 0 0 2rem 0;
+}
+
+
+#displayedNumber {
+    position: relative;
+}
+
 
 #student_list {
     position: relative;
@@ -66,10 +78,6 @@ button.filter {
     align-items: flex-start;
     gap: 1rem;
     margin: 0 30rem 0 30rem;
-}
-
-#displayedNumber {
-    position: relative;
 }
 
 .student {
