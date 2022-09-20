@@ -98,9 +98,6 @@ async function loadData() {
 
     // when loaded, prepare data objects
     prepareObjects(studentJSON);
-
-    //closing the pop-up
-    document.querySelector("#container").addEventListener("click", closePopup);
 }
 
 function prepareObjects(studentJSON) {
@@ -463,10 +460,15 @@ function popupStudent(student) {
         // append clone to list
         document.querySelector("#pop_up").appendChild(popupClone);   
 
+        //closing the pop-up
+        document.querySelectorAll("#close_button").forEach(button => {
+            button.addEventListener("click", closePopup);
+        });
+
         // prefect button eventlistener
         document.querySelectorAll("#p_button").forEach(button => {
             button.addEventListener("click", changePrefectStatus);
-        })
+        });
 }
 
 
@@ -523,6 +525,10 @@ function getStudentId(student) {
     return id;
 }
 
+function makePrefect() {
+    findStudent(allStudents);
+ }
+
 function findStudent(allStudents) {
     console.log("findStudent");
     let foundStudent = allStudents.find(hasId);
@@ -577,6 +583,11 @@ function addToPrefects(student, housePrefects) {
 
     housePrefects.push(student);
     student.isPrefect = true;
+    
+    document.querySelectorAll("#p_button").forEach(button => {
+        button.textContent = `Remove from ${student.house} prefects`
+    });
+
     console.log(`${student.firstname} ${student.lastname} has been added to ${student.house} Prefects`)
     console.log(housePrefects);
 }
@@ -606,8 +617,4 @@ function removeFromPrefects(student) {
     student.isPrefect = false;
     console.log(`${student.firstname} ${student.lastname} has been removed from ${student.house} Prefects`)
     console.log(housePrefects);
-}
-
-function makePrefect() {
-   findStudent(allStudents);
 }
