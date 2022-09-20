@@ -6,7 +6,7 @@
 // ?
 // TODO
 
-// * STAGE: DISPLAYING THE LIST OF STUDENTS (done), WITH SORTING (done), FILTERING (done), SEARCHING (done), POP-UP (done), DISPLAYED STUDENT NR
+// * STAGE: SELECTING STUDENTS AS PREFECTS, EXPELLING STUDENTS
 
 // LETS START THIS S
 
@@ -33,22 +33,33 @@ const Student = {
     gender: "",
     house: "",
     image: "",
+    isPrefect: false,
+    isExpelled: false,
+    isInq: false,
 };
+
+// Arrays for prefects
+let GryffindorPrefects = [], SlytherinPrefects = [], HufflepuffPrefects = [], RavenclawPrefects = [];
+let housePrefects;
 
 
 //? EVENTLISTENERS
 
 // BUTTONS
 function registerButtons() {
+
+        // filtering by house
     document.querySelectorAll("[data-action= 'housefilter']").forEach(button =>
         button.addEventListener("click", selectHouse));
 
 /*     document.querySelectorAll("[data-action= 'filter']").forEach(button =>
         button.addEventListener("click", selectFilter)); */
 
+        // sorting
     document.querySelectorAll("[data-action= 'sort']").forEach(button =>
         button.addEventListener("click", selectSort));
 
+        // searching
     document.querySelector("#search_button").addEventListener("click", receiveInput);
 }
 
@@ -372,14 +383,12 @@ function setSearch(input) {
 function findResults(searchedStudents) {
 
     searchedStudents = allStudents.filter(findMe);
-    const lowercaseSearchBy = settings.searchBy;
 
     function findMe(student) {
         let stringvalues = Object.values(student).toString();
         stringvalues = stringvalues.toLowerCase();
         return stringvalues.includes(settings.searchBy);
     }
-
 
     console.log(searchedStudents);
     return searchedStudents;
@@ -440,19 +449,24 @@ function popupList(students) {
 }
 
 function popupStudent(student) {
-       // create clone
-       const popupClone = document.querySelector("#popup_template").content.cloneNode(true);
+        // create clone
+        const popupClone = document.querySelector("#popup_template").content.cloneNode(true);
         
-       // set clone data
-       popupClone.querySelector("[data-field=photo]").src = `images/${student.image}`;
-       popupClone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
-       popupClone.querySelector("[data-field=nickname]").textContent = `${student.nickname}`;
-       popupClone.querySelector("[data-field=house]").textContent = student.house;
-       popupClone.querySelector(".popup_student").setAttribute("id", `popup_student${student.index}`);
-       popupClone.querySelector(".popup_student").setAttribute("class", "hidden");
-   
-       // append clone to list
-       document.querySelector("#pop_up").appendChild(popupClone);   
+        // set clone data
+        popupClone.querySelector("[data-field=photo]").src = `images/${student.image}`;
+        popupClone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
+        popupClone.querySelector("[data-field=nickname]").textContent = `${student.nickname}`;
+        popupClone.querySelector("[data-field=house]").textContent = student.house;
+        popupClone.querySelector(".popup_student").setAttribute("id", `popup_student${student.index}`);
+        popupClone.querySelector(".popup_student").setAttribute("class", "hidden");
+    
+        // append clone to list
+        document.querySelector("#pop_up").appendChild(popupClone);   
+
+        // prefect button eventlistener
+        document.querySelectorAll("#p_button").forEach(button => {
+            button.addEventListener("click", changePrefectStatus);
+        })
 }
 
 
@@ -484,4 +498,122 @@ function closePopup() {
     document.querySelector(`#popup_student${id}`).classList.add("hidden");
     document.querySelector(`#popup_student${id}`).classList.remove("middle");
     document.querySelector("#container").classList.add("hidden");
+}
+
+
+
+//* NAMING STUDENTS AS PREFECTS
+
+function changePrefectStatus(event) {
+    console.log("changePrefectStatus");
+
+    const selectedStudent = event.target.parentElement.parentElement.id;
+    
+    getStudentId(selectedStudent);
+    makePrefect(getStudentId);
+}
+
+function getStudentId(student) {
+    console.log("checkHousePrefects");
+    console.log(student);
+
+    id = parseInt(student.substring(13));
+    console.log(id);
+
+    return id;
+}
+
+function findStudent(allStudents) {
+    console.log("findStudent");
+    let foundStudent = allStudents.find(hasId);
+
+    function hasId(object) {
+        return object.index === id;
+    }
+
+    console.log(foundStudent);
+    checkIfPrefect(foundStudent);
+}
+
+function checkIfPrefect(foundStudent) {
+    console.log("checkIfPrefect");
+    console.log(foundStudent);
+
+    if (foundStudent.isPrefect) {
+        console.log(`${foundStudent.firstname} ${foundStudent.lastname} is prefect of ${foundStudent.house}`);
+        removeFromPrefects(foundStudent);
+    } else if (!foundStudent.isPrefect) {
+        console.log(`${foundStudent.firstname} ${foundStudent.lastname} is not prefect of ${foundStudent.house}`);
+        checkHousePrefects(foundStudent);
+    }
+}
+
+function checkHousePrefects(student) {
+    console.log("checkHousePrefects");
+
+    if (student.house === "Gryffindor") {
+        housePrefects = GryffindorPrefects;
+        console.log("GryffindorPrefects", housePrefects);
+    };
+    if (student.house === "Slytherin") {
+        housePrefects = SlytherinPrefects;
+        console.log("SlytherinPrefects", housePrefects);
+    };
+    if (student.house === "Hufflepuff") {
+        housePrefects = HufflepuffPrefects;
+        console.log("HufflepuffPrefects", housePrefects);        
+    };
+    if (student.house === "Ravenclaw") {
+        housePrefects = RavenclawPrefects;
+        console.log("RavenclawPrefects", housePrefects);
+    };
+
+
+    if (housePrefects.length === 2) {
+        console.log("Action not possible");
+    } else if (housePrefects.length < 2) {
+        console.log("Action possible");
+        addToPrefects(student, housePrefects);
+    }
+}
+
+function addToPrefects(student, housePrefects) {
+    console.log("addToPrefects");
+
+    housePrefects.push(student);
+    student.isPrefect = true;
+    console.log(`${student.firstname} ${student.lastname} has been added to ${student.house}Prefects`)
+    console.log(housePrefects);
+}
+
+function removeFromPrefects(student) {
+    console.log("removeFromPrefects")
+    console.log(student);
+
+    if (student.house === "Gryffindor") {
+        housePrefects = GryffindorPrefects;
+        console.log("GryffindorPrefects", housePrefects);
+    };
+    if (student.house === "Slytherin") {
+        housePrefects = SlytherinPrefects;
+        console.log("SlytherinPrefects", housePrefects);
+    };
+    if (student.house === "Hufflepuff") {
+        housePrefects = HufflepuffPrefects;
+        console.log("HufflepuffPrefects", housePrefects);        
+    };
+    if (student.house === "Ravenclaw") {
+        housePrefects = RavenclawPrefects;
+        console.log("RavenclawPrefects", housePrefects);
+    };
+
+    
+
+    student.isPrefect = false;
+    console.log(`${student.firstname} ${student.lastname} has been removed from ${student.house}Prefects`)
+    console.log(housePrefects);
+}
+
+function makePrefect() {
+   findStudent(allStudents);
 }
