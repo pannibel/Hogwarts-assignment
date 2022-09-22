@@ -530,11 +530,13 @@ function changePrefectStatus(event) {
     const selectedStudent = event.target.parentElement.parentElement.id;
     
     getStudentId(selectedStudent);
-    lookForStudent(getStudentId);
+    findStudent(allStudents);
+
     checkIfPrefect(findStudent);
 }
 
-//! THESE NEXT 3 FUNCTIONS ARE FOR EXPELLING AND INQ SQUAD AS WELL
+//! THESE NEXT 2 FUNCTIONS ARE FOR EXPELLING AND INQ SQUAD AS WELL
+// this one gets the student index number and assigns it to the global id variable
 function getStudentId(student) {
     console.log("getStudentIndex");
     console.log(student);
@@ -545,10 +547,7 @@ function getStudentId(student) {
     return id;
 }
 
-function lookForStudent() {
-    findStudent(allStudents);
- }
-
+// this one finds a whole student in allStudents and assigns it to the global foundStudent variable
 function findStudent(allStudents) {
     console.log("findStudent");
     foundStudent = allStudents.find(hasId);
@@ -560,6 +559,8 @@ function findStudent(allStudents) {
     console.log(foundStudent);
     return foundStudent;
 }
+
+
 
 function checkIfPrefect() {
     console.log("checkIfPrefect");
@@ -653,8 +654,10 @@ function changeExpelledStatus(event) {
 
     const selectedStudent = event.target.parentElement.parentElement.id;
     
+    // these functions are higher up in prefect section
     getStudentId(selectedStudent);
-    lookForStudent(getStudentId);
+    findStudent(allStudents);
+
     expelStudent(findStudent);
 }
 
@@ -662,16 +665,19 @@ function expelStudent() {
     console.log("expelStudent");
     console.log(foundStudent);
 
+    // removing the expelled student from the allStudent array
     for(let i = 0; i < allStudents.length; i++){
         if (allStudents[i] === foundStudent) {  
             allStudents.splice(i, 1); 
         }
     };
 
+    // adding the expelled student to the expelled array
     expelledStudents.push(foundStudent);
     console.log(`${foundStudent.firstname} ${foundStudent.lastname} has been expelled!`);
     console.log("Expelled students: ", expelledStudents);
 
+    // displaying the studentList instantly without the expelled student
     buildList();
     console.log(allStudents);
 }
