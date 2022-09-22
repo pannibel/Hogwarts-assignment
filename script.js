@@ -14,6 +14,8 @@
 let studentJSON;
 let fullname, house, gender, firstname, middlename, lastname, nickname, image, firstletter;
 let allStudents = [];
+let expelledStudents = [];
+let currentArray;
 let studentNumber;
 let index = 1;
 let id;
@@ -42,9 +44,6 @@ const Student = {
 // Arrays for prefects
 let GryffindorPrefects = [], SlytherinPrefects = [], HufflepuffPrefects = [], RavenclawPrefects = [];
 let housePrefects;
-
-// Array for expelled
-let expelledStudents = [];
 
 
 //? EVENTLISTENERS
@@ -109,6 +108,9 @@ function prepareObjects(studentJSON) {
 
     allStudents = studentJSON.map(cleanData);
     console.log(allStudents);
+
+    currentArray = allStudents;
+
     displayList(allStudents);
     popupList(allStudents);
 }
@@ -239,86 +241,103 @@ function selectFilter() {
     console.log("You selected", this.value);
     const option = this.value;
 
+    if (option < 4) {
+        currentArray = allStudents;
+        console.log(`Current array is allStudents`);
+    } else {
+        currentArray = expelledStudents;
+        console.log(`Current array is expelledStudents`);
+    }
+
     setFilter(option);
-} 
-
-function setFilter(filter) {
-    settings.filterBy = filter;
-    buildList();
-}
-
-function filterList(filteredList) {
-
-    if (settings.filterBy === "2") {
-        filteredList = allStudents.filter(isPref);
-    };
-    if (settings.filterBy === "3") {
-        filteredList = allStudents.filter(isInq);
-    };
-    if (settings.filterBy === "4") {
-        filteredList = allStudents.filter(isExp);
-    };
-
-    return filteredList
-};
-
-function isPref(student) {
-    return student.isPref === true;
-}
-
-function isSquad(student) {
-    return student.isInq === true;
-}
-
-function isExp(student) {
-    return student.isExpelled === true;
 }
 
 // HOUSE FILTERING
 function selectHouse(event) {
     const houseFilter = event.target.dataset.filter;
     console.log(`User selected ${houseFilter}`);
-    setHouse(houseFilter);
+
+    currentArray = allStudents;
+    console.log(`Current array is allStudents`);
+    setFilter(houseFilter);
+
+    // plus resetting the dropdown value to 1 so it looks good
+    resetDropdown();
 }
 
-function setHouse(filter) {
+function setFilter(filter) {
+    console.log("setFilter");
     settings.filterBy = filter;
     buildList();
 }
 
 function filterList(filteredList) {
-    //let filteredList = allAnimals;
+    console.log("filterList");
+
+    // for house
     if (settings.filterBy === "gryf"){
-        houseList = allStudents.filter(isGryf);
+        filteredList = currentArray.filter(isGryf);
     };
     if (settings.filterBy === "sly"){
-        houseList = allStudents.filter(isSly);
+        filteredList = currentArray.filter(isSly);
     };
     if (settings.filterBy === "huf"){
-        houseList = allStudents.filter(isHuf);
+        filteredList = currentArray.filter(isHuf);
     };
     if (settings.filterBy === "rav"){
-        houseList = allStudents.filter(isRav);
+        filteredList = currentArray.filter(isRav);
     };
+
+    // for general
+    if (settings.filterBy === "2") {
+        filteredList = currentArray.filter(isPref);
+    };
+    if (settings.filterBy === "3") {
+        filteredList = currentArray.filter(isInq);
+    };
+    if (settings.filterBy === "4") {
+        filteredList = currentArray.filter(isExp);
+    };
+
+
+    function isGryf(student) {
+        return student.house === "Gryffindor"
+    }
     
-    return houseList;
+    function isSly(student) {
+        return student.house === "Slytherin"
+    }
+    
+    function isHuf(student) {
+        return student.house === "Hufflepuff"
+    }
+    
+    function isRav(student) {
+        return student.house === "Ravenclaw"
+    }
+    
+    
+    function isPref(student) {
+        return student.isPrefect === true;
+    }
+    
+    function isInq(student) {
+        return student.isInq === true;
+    }
+    
+    function isExp(student) {
+        return student.isExpelled === true;
+    }
+    
+    return filteredList;
 }
 
-function isGryf(student) {
-    return student.house === "Gryffindor"
+function resetDropdown() {
+    console.log("resetDropdown");
+    document.querySelector("#options").selectedIndex = 0;
 }
 
-function isSly(student) {
-    return student.house === "Slytherin"
-}
 
-function isHuf(student) {
-    return student.house === "Hufflepuff"
-}
-
-function isRav(student) {
-    return student.house === "Ravenclaw"
-}
 
 
 // SORTING
@@ -399,7 +418,7 @@ function sortList(sortedList) {
 
 //BUILDLIST
 function buildList() {
-    const currentList = filterList(allStudents);
+    const currentList = filterList(currentArray);
     const sortedList = sortList(currentList);
 
     displayList(sortedList);
@@ -724,5 +743,4 @@ function expelStudent() {
     buildList();
     console.log(allStudents);
 }
-
 
