@@ -56,8 +56,8 @@ function registerButtons() {
     document.querySelectorAll("[data-action= 'housefilter']").forEach(button =>
         button.addEventListener("click", selectHouse));
 
-/*     document.querySelectorAll("[data-action= 'filter']").forEach(button =>
-        button.addEventListener("click", selectFilter)); */
+        // filtering
+    document.querySelector("#options").addEventListener("change", selectFilter);
 
         // sorting
     document.querySelectorAll("[data-action= 'sort']").forEach(button =>
@@ -233,11 +233,52 @@ function cleanData(object) {
 
 //* BIG BUILDLIST FUNCTION WITH FILTERING AND SORTING
 
+// FILTERING FOR PREFECTS, EXPELLED, INQ SQUAD
+function selectFilter() {
+    console.log("selectFilter");
+    console.log("You selected", this.value);
+    const option = this.value;
+
+    setFilter(option);
+} 
+
+function setFilter(filter) {
+    settings.filterBy = filter;
+    buildList();
+}
+
+function filterList(filteredList) {
+
+    if (settings.filterBy === "2") {
+        filteredList = allStudents.filter(isPref);
+    };
+    if (settings.filterBy === "3") {
+        filteredList = allStudents.filter(isInq);
+    };
+    if (settings.filterBy === "4") {
+        filteredList = allStudents.filter(isExp);
+    };
+
+    return filteredList
+};
+
+function isPref(student) {
+    return student.isPref === true;
+}
+
+function isSquad(student) {
+    return student.isInq === true;
+}
+
+function isExp(student) {
+    return student.isExpelled === true;
+}
+
 // HOUSE FILTERING
 function selectHouse(event) {
-    const housefilter = event.target.dataset.filter;
-    console.log(`User selected ${housefilter}`);
-    setHouse(housefilter);
+    const houseFilter = event.target.dataset.filter;
+    console.log(`User selected ${houseFilter}`);
+    setHouse(houseFilter);
 }
 
 function setHouse(filter) {
@@ -245,7 +286,7 @@ function setHouse(filter) {
     buildList();
 }
 
-function filterHouse(houseList) {
+function filterList(filteredList) {
     //let filteredList = allAnimals;
     if (settings.filterBy === "gryf"){
         houseList = allStudents.filter(isGryf);
@@ -358,7 +399,7 @@ function sortList(sortedList) {
 
 //BUILDLIST
 function buildList() {
-    const currentList = filterHouse(allStudents);
+    const currentList = filterList(allStudents);
     const sortedList = sortList(currentList);
 
     displayList(sortedList);
@@ -664,6 +705,8 @@ function changeExpelledStatus(event) {
 function expelStudent() {
     console.log("expelStudent");
     console.log(foundStudent);
+
+    foundStudent.isExpelled = true;
 
     // removing the expelled student from the allStudent array
     for(let i = 0; i < allStudents.length; i++){
