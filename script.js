@@ -6,7 +6,7 @@
 // ?
 // TODO
 
-// * STAGE: SELECTING STUDENTS AS PREFECTS (done), EXPELLING STUDENTS
+// * STAGE: SELECTING STUDENTS AS PREFECTS (done), EXPELLING STUDENTS (done), EXPELLED STUDENTS FILTERING
 
 // LETS START THIS S
 
@@ -17,6 +17,7 @@ let allStudents = [];
 let studentNumber;
 let index = 1;
 let id;
+let foundStudent;
 const settings = {
     filterBy: "all",
     sortBy: "name",
@@ -41,6 +42,9 @@ const Student = {
 // Arrays for prefects
 let GryffindorPrefects = [], SlytherinPrefects = [], HufflepuffPrefects = [], RavenclawPrefects = [];
 let housePrefects;
+
+// Array for expelled
+let expelledStudents = [];
 
 
 //? EVENTLISTENERS
@@ -475,10 +479,10 @@ function popupStudent(student) {
         });
 
         // inq button eventlistener
-        document.querySelectorAll(`#i_button${student.index}`).forEach(button => {
+     /*    document.querySelectorAll(`#i_button${student.index}`).forEach(button => {
             button.addEventListener("click", changeInqStatus);
         });
-
+ */
         // expel button eventlistener
         document.querySelectorAll(`#e_button${student.index}`).forEach(button => {
             button.addEventListener("click", changeExpelledStatus);
@@ -526,11 +530,13 @@ function changePrefectStatus(event) {
     const selectedStudent = event.target.parentElement.parentElement.id;
     
     getStudentId(selectedStudent);
-    makePrefect(getStudentId);
+    lookForStudent(getStudentId);
+    checkIfPrefect(findStudent);
 }
 
+//! THESE NEXT 3 FUNCTIONS ARE FOR EXPELLING AND INQ SQUAD AS WELL
 function getStudentId(student) {
-    console.log("checkHousePrefects");
+    console.log("getStudentIndex");
     console.log(student);
 
     id = parseInt(student.substring(13));
@@ -539,24 +545,25 @@ function getStudentId(student) {
     return id;
 }
 
-function makePrefect() {
+function lookForStudent() {
     findStudent(allStudents);
  }
 
 function findStudent(allStudents) {
     console.log("findStudent");
-    let foundStudent = allStudents.find(hasId);
+    foundStudent = allStudents.find(hasId);
 
     function hasId(object) {
         return object.index === id;
     }
 
     console.log(foundStudent);
-    checkIfPrefect(foundStudent);
+    return foundStudent;
 }
 
-function checkIfPrefect(foundStudent) {
+function checkIfPrefect() {
     console.log("checkIfPrefect");
+    console.log(foundStudent);
 
     if (foundStudent.isPrefect) {
         console.log(`${foundStudent.firstname} ${foundStudent.lastname} is prefect of ${foundStudent.house}`);
@@ -636,3 +643,37 @@ function removeFromPrefects(student) {
     console.log(`${student.firstname} ${student.lastname} has been removed from ${student.house} Prefects`)
     console.log(housePrefects);
 }
+
+
+
+//* EXPELLING STUDENTS
+
+function changeExpelledStatus(event) {
+    console.log("changeExpelledStatus");
+
+    const selectedStudent = event.target.parentElement.parentElement.id;
+    
+    getStudentId(selectedStudent);
+    lookForStudent(getStudentId);
+    expelStudent(findStudent);
+}
+
+function expelStudent() {
+    console.log("expelStudent");
+    console.log(foundStudent);
+
+    for(let i = 0; i < allStudents.length; i++){
+        if (allStudents[i] === foundStudent) {  
+            allStudents.splice(i, 1); 
+        }
+    };
+
+    expelledStudents.push(foundStudent);
+    console.log(`${foundStudent.firstname} ${foundStudent.lastname} has been expelled!`);
+    console.log("Expelled students: ", expelledStudents);
+
+    buildList();
+    console.log(allStudents);
+}
+
+
