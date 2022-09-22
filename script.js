@@ -6,7 +6,7 @@
 // ?
 // TODO
 
-// * STAGE: SELECTING STUDENTS AS PREFECTS, EXPELLING STUDENTS
+// * STAGE: SELECTING STUDENTS AS PREFECTS (done), EXPELLING STUDENTS
 
 // LETS START THIS S
 
@@ -456,6 +456,10 @@ function popupStudent(student) {
         popupClone.querySelector("[data-field=house]").textContent = student.house;
         popupClone.querySelector(".popup_student").setAttribute("id", `popup_student${student.index}`);
         popupClone.querySelector(".popup_student").setAttribute("class", "hidden");
+        popupClone.querySelector("#p_button").setAttribute("id", `p_button${student.index}`);
+        popupClone.querySelector("#i_button").setAttribute("id", `i_button${student.index}`);
+        popupClone.querySelector("#e_button").setAttribute("id", `e_button${student.index}`);
+
     
         // append clone to list
         document.querySelector("#pop_up").appendChild(popupClone);   
@@ -466,8 +470,18 @@ function popupStudent(student) {
         });
 
         // prefect button eventlistener
-        document.querySelectorAll("#p_button").forEach(button => {
+        document.querySelectorAll(`#p_button${student.index}`).forEach(button => {
             button.addEventListener("click", changePrefectStatus);
+        });
+
+        // inq button eventlistener
+        document.querySelectorAll(`#i_button${student.index}`).forEach(button => {
+            button.addEventListener("click", changeInqStatus);
+        });
+
+        // expel button eventlistener
+        document.querySelectorAll(`#e_button${student.index}`).forEach(button => {
+            button.addEventListener("click", changeExpelledStatus);
         });
 }
 
@@ -583,12 +597,12 @@ function addToPrefects(student, housePrefects) {
 
     housePrefects.push(student);
     student.isPrefect = true;
-    
-    document.querySelectorAll("#p_button").forEach(button => {
-        button.textContent = `Remove from ${student.house} prefects`
-    });
 
-    console.log(`${student.firstname} ${student.lastname} has been added to ${student.house} Prefects`)
+    const studentPButton = document.querySelector(`#p_button${student.index}`);
+    console.log(studentPButton.id);
+    studentPButton.textContent = "Remove from prefects";
+
+    console.log(`${student.firstname} ${student.lastname} has been added to ${student.house} Prefects`);
     console.log(housePrefects);
 }
 
@@ -613,6 +627,10 @@ function removeFromPrefects(student) {
             housePrefects.splice(i, 1); 
         }
     };
+
+    const studentPButton = document.querySelector(`#p_button${student.index}`);
+    console.log(studentPButton.id);
+    studentPButton.textContent = "Select as prefect";
 
     student.isPrefect = false;
     console.log(`${student.firstname} ${student.lastname} has been removed from ${student.house} Prefects`)
