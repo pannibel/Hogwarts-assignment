@@ -6,20 +6,28 @@
 // ?
 // TODO
 
-// * STAGE: SELECTING STUDENTS AS PREFECTS (done), EXPELLING STUDENTS (done), EXPELLED STUDENTS FILTERING
+// * STAGE: SELECTING STUDENTS AS PREFECTS (done), EXPELLING STUDENTS (done), EXPELLED STUDENTS FILTERING (done)
 
 // LETS START THIS S
 
 // GLOBAL OBJECTS AND VARIABLES
 let studentJSON;
-let fullname, house, gender, firstname, middlename, lastname, nickname, image, firstletter;
+
+// Arrays
 let allStudents = [];
 let expelledStudents = [];
 let currentArray;
+let GryffindorPrefects = [], SlytherinPrefects = [], HufflepuffPrefects = [], RavenclawPrefects = [];
+let housePrefects;
 let studentNumber;
+
+// For students
+let fullname, house, gender, firstname, middlename, lastname, nickname, image, firstletter;
 let index = 1;
 let id;
 let foundStudent;
+
+// For filtering, sorting and searching
 const settings = {
     filterBy: "all",
     sortBy: "name",
@@ -36,21 +44,15 @@ const Student = {
     gender: "",
     house: "",
     image: "",
+    blood: "",
     isPrefect: false,
     isExpelled: false,
     isInq: false,
 };
 
-// Arrays for prefects
-let GryffindorPrefects = [], SlytherinPrefects = [], HufflepuffPrefects = [], RavenclawPrefects = [];
-let housePrefects;
-
-
-//? EVENTLISTENERS
-
-// BUTTONS
+// EVENTLISTENER FUNCTIONS
+// buttons
 function registerButtons() {
-
         // filtering by house
     document.querySelectorAll("[data-action= 'housefilter']").forEach(button =>
         button.addEventListener("click", selectHouse));
@@ -108,11 +110,9 @@ function prepareObjects(studentJSON) {
 
     allStudents = studentJSON.map(cleanData);
     console.log(allStudents);
-
     currentArray = allStudents;
 
     displayList(allStudents);
-    popupList(allStudents);
 }
 
 
@@ -217,8 +217,6 @@ function cleanData(object) {
     
     
     const student = Object.create(Student);
-
-        // set properties on the object to the variables
         student.firstname = firstname;
         student.middlename = middlename;
         student.lastname = lastname;
@@ -235,7 +233,7 @@ function cleanData(object) {
 
 //* BIG BUILDLIST FUNCTION WITH FILTERING AND SORTING
 
-// FILTERING FOR PREFECTS, EXPELLED, INQ SQUAD
+// FILTERING FOR PREFECTS, EXPELLED, INQ SQUAD, BLOOD STATUS
 function selectFilter() {
     console.log("selectFilter");
     console.log("You selected", this.value);
@@ -339,7 +337,6 @@ function resetDropdown() {
 
 
 
-
 // SORTING
 function selectSort(event) {
     const sortBy = event.target.dataset.sort;
@@ -411,8 +408,7 @@ function sortList(sortedList) {
     };
 
     return sortedList;
-} 
-
+}
 
 
 
@@ -432,7 +428,10 @@ function receiveInput() {
     let input = document.querySelector("#input").value;
     console.log(input);
 
+    currentArray = allStudents;
+
     setSearch(input);
+    resetDropdown();
 }
 
 function setSearch(input) {
@@ -456,7 +455,6 @@ function findResults(searchedStudents) {
 }
 
 function searchResults() {
-
     const searchedList = findResults(allStudents);
     displayList(searchedList);
 }
@@ -487,7 +485,6 @@ function displayStudent(student) {
     clone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
     clone.querySelector("[data-field=house]").textContent = student.house;
     clone.querySelector("div.student").setAttribute("id", `${student.index}`);
-    //clone.querySelector("[data-field=name]").addEventListener("click", selectStudent);
 
     // append clone to list
     document.querySelector("#student_list").appendChild(clone);
@@ -499,12 +496,10 @@ function displayStudent(student) {
 }
 
 
-//* FOUNDSTUDENT FUNCTION TO USE FOR ACTING ON ONE STUDENT
-
-//! THESE NEXT 2 FUNCTIONS ARE FOR EXPELLING AND INQ SQUAD AS WELL
+//? FOUNDSTUDENT FUNCTION TO USE FOR ACTING ON ONE STUDENT
 // this one gets the student index number and assigns it to the global id variable
 function getStudentId(student) {
-    console.log("getStudentIndex");
+    console.log("getStudentId");
     console.log(student);
 
     id = parseInt(student);
@@ -529,15 +524,21 @@ function findStudent(currentArray) {
 
 
 //* POP UP OF STUDENT
-function popupList(students) {
-    // clear the list
-    document.querySelector("#pop_up").innerHTML = "";
 
-    // build a new list
-    students.forEach(popupStudent);
+function selectStudent(event) {
+    const selectedStudent = event.target.parentElement.parentElement.id;
+    console.log(`User selected ${selectedStudent}`);
+
+    getStudentId(selectedStudent);
+    findStudent(currentArray);
+    popupStudent(foundStudent);
 }
 
 function popupStudent(student) {
+        // clear the list
+        document.querySelector("#pop_up").innerHTML = "";
+        document.querySelector("#container").classList.remove("hidden");
+
         // create clone
         const popupClone = document.querySelector("#popup_template").content.cloneNode(true);
         
@@ -546,15 +547,14 @@ function popupStudent(student) {
         popupClone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
         popupClone.querySelector("[data-field=nickname]").textContent = `${student.nickname}`;
         popupClone.querySelector("[data-field=house]").textContent = student.house;
-        popupClone.querySelector(".popup_student").setAttribute("id", `popup_student${student.index}`);
-        popupClone.querySelector(".popup_student").setAttribute("class", "hidden");
+        popupClone.querySelector(".popup_student").setAttribute("id", `popup${student.index}`);
         popupClone.querySelector("#p_button").setAttribute("id", `p_button${student.index}`);
         popupClone.querySelector("#i_button").setAttribute("id", `i_button${student.index}`);
         popupClone.querySelector("#e_button").setAttribute("id", `e_button${student.index}`);
 
     
         // append clone to list
-        document.querySelector("#pop_up").appendChild(popupClone);   
+        document.querySelector("#pop_up").appendChild(popupClone);
 
         //closing the pop-up
         document.querySelectorAll("#close_button").forEach(button => {
@@ -563,7 +563,7 @@ function popupStudent(student) {
 
         // prefect button eventlistener
         document.querySelectorAll(`#p_button${student.index}`).forEach(button => {
-            button.addEventListener("click", changePrefectStatus);
+            button.addEventListener("click", checkIfPrefect);
         });
 
         // inq button eventlistener
@@ -573,43 +573,19 @@ function popupStudent(student) {
  */
         // expel button eventlistener
         document.querySelectorAll(`#e_button${student.index}`).forEach(button => {
-            button.addEventListener("click", changeExpelledStatus);
+            button.addEventListener("click", expelStudent);
         });
-}
-
-
-function selectStudent(event) {
-    const selectedStudent = event.target.parentElement.parentElement.id;
-    console.log(`User selected ${selectedStudent}`);
-
-    getStudentId(selectedStudent);
-    findStudent(currentArray);
-    openPopup(findStudent);
-}
-
-function openPopup() {
-    document.querySelector(`#popup_student${id}`).classList.remove("hidden");
-    document.querySelector(`#popup_student${id}`).classList.add("middle");
-    document.querySelector("#container").classList.remove("hidden");
 }
 
 // close pop-up
 function closePopup() {
-    document.querySelector(`#popup_student${id}`).classList.add("hidden");
-    document.querySelector(`#popup_student${id}`).classList.remove("middle");
+    document.querySelector(`#popup${id}`).classList.add("hidden");
     document.querySelector("#container").classList.add("hidden");
 }
 
 
 
-//* NAMING STUDENTS AS PREFECTS
-
-function changePrefectStatus(foundStudent) {
-    console.log("changePrefectStatus");
-
-    checkIfPrefect(foundStudent);
-}
-
+//* NAMING STUDENT AS PREFECT
 
 function checkIfPrefect() {
     console.log("checkIfPrefect");
@@ -696,13 +672,7 @@ function removeFromPrefects(student) {
 
 
 
-//* EXPELLING STUDENTS
-
-function changeExpelledStatus(foundStudent) {
-    console.log("changeExpelledStatus");
-
-    expelStudent(foundStudent);
-}
+//* EXPELLING STUDENT
 
 function expelStudent() {
     console.log("expelStudent");

@@ -107,7 +107,7 @@ button.filter {
     padding: 2rem;
 }
 
-.middle {
+.popup_student {
     position: fixed;
     display: flex;
     flex-direction: column;
