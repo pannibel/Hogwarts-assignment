@@ -24,6 +24,7 @@ let currentArray;
 let GryffindorPrefects = [], SlytherinPrefects = [], HufflepuffPrefects = [], RavenclawPrefects = [];
 let housePrefects;
 let pureBloods = [], halfBloods = [], muggleBorns = [];
+let inqSquad = [];
 let studentNumber;
 
 // For students
@@ -136,6 +137,8 @@ function prepareObjects(studentJSON) {
     console.log(allStudents);
     currentArray = allStudents;
 
+    bloodArrays();
+
     displayList(allStudents);
 }
 
@@ -242,13 +245,13 @@ function cleanData(object) {
 
     //adding blood status
     if (!familiesJSON.half.includes(lastname) && !familiesJSON.pure.includes(lastname)) {
-        blood = "muggleborn"
+        blood = "muggleborn";
     };
     if (familiesJSON.half.includes(lastname)) {
-        blood = "half-blood"
+        blood = "half-blood";
     };
     if (familiesJSON.pure.includes(lastname)) {
-        blood = "pureblood"
+        blood = "pureblood";
     };
     
     
@@ -604,8 +607,12 @@ function popupStudent(student) {
 
         if (student.isInq) {
             i_button.textContent = "Remove from inquisitorial squad"
-        } else {
+        };
+        if (!student.isInq) {
             i_button.textContent = "Add to inquisitorial squad"
+        };
+        if (student.blood === "half-blood" || student.blood === "muggleborn") {
+            i_button.classList.add("hidden");
         };
 
         // if student is expelled
@@ -618,7 +625,6 @@ function popupStudent(student) {
         };
 
         // if for blood status
-
 
     
         // append clone to list
@@ -635,10 +641,10 @@ function popupStudent(student) {
         });
 
         // inq button eventlistener
-     /*    document.querySelectorAll(`#i_button${student.index}`).forEach(button => {
+        document.querySelectorAll(`#i_button${student.index}`).forEach(button => {
             button.addEventListener("click", changeInqStatus);
         });
- */
+
         // expel button eventlistener
         document.querySelectorAll(`#e_button${student.index}`).forEach(button => {
             button.addEventListener("click", expelStudent);
@@ -736,6 +742,8 @@ function removeFromPrefects(student) {
     student.isPrefect = false;
     console.log(`${student.firstname} ${student.lastname} has been removed from ${student.house} Prefects`)
     console.log(housePrefects);
+
+    buildList(currentArray);
 }
 
 
@@ -747,6 +755,9 @@ function expelStudent() {
     console.log(foundStudent);
 
     foundStudent.isExpelled = true;
+
+    const studentEButton = document.querySelector(`#e_button${foundStudent.index}`);
+    studentEButton.textContent = "Student is expelled";
 
     // removing the expelled student from the allStudent array
     for(let i = 0; i < allStudents.length; i++){
@@ -765,3 +776,65 @@ function expelStudent() {
     console.log(allStudents);
 }
 
+
+
+//* BLOOD STATUS AND INQUISITORIAL SQUAD
+function bloodArrays() {
+    allStudents.forEach((student) => {
+        
+        if (student.blood === "pureblood") {
+            pureBloods.push(student);
+        };
+        if (student.blood === "half-blood") {
+            halfBloods.push(student);
+        };
+        if (student.blood === "muggleborn") {
+            muggleBorns.push(student);
+        }
+    }
+)
+}
+
+function changeInqStatus() {
+    console.log("changeInqStatus");
+
+    if (foundStudent.isInq) {
+        console.log(`${foundStudent.firstname} ${foundStudent.lastname} is already part of the inquisitorial squad`);
+        removeFromInq(foundStudent);
+    } else if (!foundStudent.isInq) {
+        console.log(`${foundStudent.firstname} ${foundStudent.lastname} is not part of the inquisitorial squad`);
+        makeInq(foundStudent);
+    }
+}
+
+function makeInq(student) {
+    console.log("makeInq");
+
+    inqSquad.push(student);
+    student.isInq = true;
+
+    const studentIButton = document.querySelector(`#i_button${student.index}`);
+    studentIButton.textContent = "Remove from inquisitorial squad";
+
+    console.log(`${student.firstname} ${student.lastname} has been added to the Inquisitorial Squad`);
+    console.log(inqSquad);
+}
+
+function removeFromInq(student) {
+    console.log("removeInq");
+
+    for(let i = 0; i < inqSquad.length; i++){
+        if (inqSquad[i] === student) {  
+            inqSquad.splice(i, 1); 
+        }
+    };
+
+    student.isInq = false;
+
+    const studentIButton = document.querySelector(`#i_button${student.index}`);
+    studentIButton.textContent = "Add to inquisitorial squad";
+
+    console.log(`${student.firstname} ${student.lastname} has been removed from the Inquisitorial Squad`);
+    console.log(inqSquad);
+    buildList(currentArray);
+}
