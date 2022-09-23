@@ -486,7 +486,7 @@ function displayStudent(student) {
     clone.querySelector("[data-field=photo]").src = `images/${student.image}`;
     clone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
     clone.querySelector("[data-field=house]").textContent = student.house;
-    clone.querySelector("div.student").setAttribute("id", `student${student.index}`);
+    clone.querySelector("div.student").setAttribute("id", `${student.index}`);
     //clone.querySelector("[data-field=name]").addEventListener("click", selectStudent);
 
     // append clone to list
@@ -496,6 +496,34 @@ function displayStudent(student) {
     document.querySelectorAll("#fullname").forEach(button => {
         button.addEventListener("click", selectStudent)
     })
+}
+
+
+//* FOUNDSTUDENT FUNCTION TO USE FOR ACTING ON ONE STUDENT
+
+//! THESE NEXT 2 FUNCTIONS ARE FOR EXPELLING AND INQ SQUAD AS WELL
+// this one gets the student index number and assigns it to the global id variable
+function getStudentId(student) {
+    console.log("getStudentIndex");
+    console.log(student);
+
+    id = parseInt(student);
+    console.log(id);
+
+    return id;
+}
+
+// this one finds a whole student in currentArray and assigns it to the global foundStudent variable
+function findStudent(currentArray) {
+    console.log("findStudent");
+    foundStudent = currentArray.find(hasId);
+
+    function hasId(object) {
+        return object.index === id;
+    }
+
+    console.log(foundStudent);
+    return foundStudent;
 }
 
 
@@ -554,17 +582,9 @@ function selectStudent(event) {
     const selectedStudent = event.target.parentElement.parentElement.id;
     console.log(`User selected ${selectedStudent}`);
 
-    setStudent(selectedStudent);
-    openPopup(setStudent);
-}
-
-function setStudent(student) {
-    console.log(student);
-
-    id = student.substring(7);
-    console.log(id);
-
-    return id;
+    getStudentId(selectedStudent);
+    findStudent(currentArray);
+    openPopup(findStudent);
 }
 
 function openPopup() {
@@ -584,42 +604,11 @@ function closePopup() {
 
 //* NAMING STUDENTS AS PREFECTS
 
-function changePrefectStatus(event) {
+function changePrefectStatus(foundStudent) {
     console.log("changePrefectStatus");
 
-    const selectedStudent = event.target.parentElement.parentElement.id;
-    
-    getStudentId(selectedStudent);
-    findStudent(allStudents);
-
-    checkIfPrefect(findStudent);
+    checkIfPrefect(foundStudent);
 }
-
-//! THESE NEXT 2 FUNCTIONS ARE FOR EXPELLING AND INQ SQUAD AS WELL
-// this one gets the student index number and assigns it to the global id variable
-function getStudentId(student) {
-    console.log("getStudentIndex");
-    console.log(student);
-
-    id = parseInt(student.substring(13));
-    console.log(id);
-
-    return id;
-}
-
-// this one finds a whole student in allStudents and assigns it to the global foundStudent variable
-function findStudent(allStudents) {
-    console.log("findStudent");
-    foundStudent = allStudents.find(hasId);
-
-    function hasId(object) {
-        return object.index === id;
-    }
-
-    console.log(foundStudent);
-    return foundStudent;
-}
-
 
 
 function checkIfPrefect() {
@@ -709,16 +698,10 @@ function removeFromPrefects(student) {
 
 //* EXPELLING STUDENTS
 
-function changeExpelledStatus(event) {
+function changeExpelledStatus(foundStudent) {
     console.log("changeExpelledStatus");
 
-    const selectedStudent = event.target.parentElement.parentElement.id;
-    
-    // these functions are higher up in prefect section
-    getStudentId(selectedStudent);
-    findStudent(allStudents);
-
-    expelStudent(findStudent);
+    expelStudent(foundStudent);
 }
 
 function expelStudent() {
