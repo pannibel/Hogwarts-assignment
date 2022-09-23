@@ -6,12 +6,16 @@
 // ?
 // TODO
 
-// * STAGE: SELECTING STUDENTS AS PREFECTS (done), EXPELLING STUDENTS (done), EXPELLED STUDENTS FILTERING (done)
+// * STAGE: FETCHING FAMILIES AND BLOOD STATUS
 
 // LETS START THIS S
 
 // GLOBAL OBJECTS AND VARIABLES
+const studentURL = "https://petlatkea.dk/2021/hogwarts/students.json";
+const familiesURL = "https://petlatkea.dk/2021/hogwarts/families.json";
+
 let studentJSON;
+let familiesJSON;
 
 // Arrays
 let allStudents = [];
@@ -19,10 +23,11 @@ let expelledStudents = [];
 let currentArray;
 let GryffindorPrefects = [], SlytherinPrefects = [], HufflepuffPrefects = [], RavenclawPrefects = [];
 let housePrefects;
+let pureBloods = [], halfBloods = [], muggleBorns = [];
 let studentNumber;
 
 // For students
-let fullname, house, gender, firstname, middlename, lastname, nickname, image, firstletter;
+let fullname, house, gender, firstname, middlename, lastname, nickname, image, blood, firstletter;
 let index = 1;
 let id;
 let foundStudent;
@@ -88,19 +93,38 @@ window.addEventListener("DOMContentLoaded", event => {
     start();
 });
 
-function start() {
+async function start() {
     console.log("start");
+
+    await loadFamilyJSON();
+    await loadStudentJSON();
+    prepareData();
 
     // later
     registerButtons();
     enterKey();
-    loadData();
 }
 
-async function loadData() {
-    const response = await fetch("https://petlatkea.dk/2021/hogwarts/students.json");
-    studentJSON = await response.json();
+async function loadStudentJSON() {
+    const resp = await fetch(studentURL);
+    const data = await resp.json();
+    console.log("Student JSON loaded");
+    studentJSON = data;
+}
 
+async function loadFamilyJSON() {
+    const resp = await fetch(familiesURL);
+    const data = await resp.json();
+    console.log("Families JSON loaded");
+    familiesJSON = data;
+}
+
+function prepareData() {
+    if (studentJSON.length > familiesJSON.length) {
+        console.log("There are more students than families");
+      } else {
+        console.log("There are more students than families");
+      }
     // when loaded, prepare data objects
     prepareObjects(studentJSON);
 }
@@ -214,6 +238,18 @@ function cleanData(object) {
     } else if (!lastname) {
         image = "";
     }
+
+
+    //adding blood status
+    if (!familiesJSON.half.includes(lastname) && !familiesJSON.pure.includes(lastname)) {
+        blood = "muggleborn"
+    };
+    if (familiesJSON.half.includes(lastname)) {
+        blood = "half-blood"
+    };
+    if (familiesJSON.pure.includes(lastname)) {
+        blood = "pureblood"
+    };
     
     
     const student = Object.create(Student);
@@ -225,6 +261,7 @@ function cleanData(object) {
         student.house = house;
         student.image = image;
         student.index = index++;
+        student.blood = blood;
 
     return student;
 }
@@ -551,6 +588,7 @@ function popupStudent(student) {
         popupClone.querySelector("#p_button").setAttribute("id", `p_button${student.index}`);
         popupClone.querySelector("#i_button").setAttribute("id", `i_button${student.index}`);
         popupClone.querySelector("#e_button").setAttribute("id", `e_button${student.index}`);
+        popupClone.querySelector("#blood_status").textContent = student.blood;
 
         // if student is prefect
         let p_button = popupClone.querySelector(`#p_button${student.index}`);
