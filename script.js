@@ -552,6 +552,36 @@ function popupStudent(student) {
         popupClone.querySelector("#i_button").setAttribute("id", `i_button${student.index}`);
         popupClone.querySelector("#e_button").setAttribute("id", `e_button${student.index}`);
 
+        // if student is prefect
+        let p_button = popupClone.querySelector(`#p_button${student.index}`);
+
+        if (student.isPrefect) {
+            p_button.textContent = "Remove from prefects"
+        } else {
+            p_button.textContent = "Select as prefect"
+        };
+
+        // if student is inq squad
+        let i_button = popupClone.querySelector(`#i_button${student.index}`);
+
+        if (student.isInq) {
+            i_button.textContent = "Remove from inquisitorial squad"
+        } else {
+            i_button.textContent = "Add to inquisitorial squad"
+        };
+
+        // if student is expelled
+        let e_button = popupClone.querySelector(`#e_button${student.index}`);
+
+        if (student.isExpelled) {
+            e_button.textContent = "Student is expelled"
+        } else {
+            e_button.textContent = "Expel"
+        };
+
+        // if for blood status
+
+
     
         // append clone to list
         document.querySelector("#pop_up").appendChild(popupClone);
