@@ -189,7 +189,7 @@ h2 {
 
     color: var(--color-black);
     border-color: var(--color-black);
-    background-color: transparent;
+    background-color: var(--color-backgroundshade);
 }
 
 #all_students:hover {
@@ -421,16 +421,157 @@ h2 {
 
 .popup_student {
     position: fixed;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 47% 47% 6%;
+    grid-template-rows: auto;
+    column-gap: var(--spacing-medium);
+
     height: 50%;
     width: 40%;
     top: 25%;
     justify-content: center;
     align-items: center;
-    background-color: beige;
     z-index: 1;
     justify-self: center;
+    padding-left: var(--spacing-large);
+    padding-right: var(--spacing-large);
+    padding-top: var(--spacing-xsmall);
+    padding-bottom: var(--spacing-xsmall);
+
+    background-color: var(--color-background);
+    border-radius: 20px;
+    border-style: solid;
+    border-color: var(--color-black);
+    border-width: 1px; 
+
+    font-family: var(--font-family_primary);
+    color: var(--color-backgroundshade)
+}
+
+#popup_photo {
+    grid-column: 1 / 2;
+    grid-row: 1 / 4;
+    margin-right: var(--spacing-medium);
+
+    width: 100%;
+    height: auto;
+    border-style: solid;
+    border-color: #000;
+    border-width: 2px;
+    border-radius: 60px;
+}
+
+#expel {
+    grid-column: 1 /2;
+    grid-row: 4 / 5;
+}
+
+#close_button {
+    grid-column: 3 / 4;
+    justify-self: center;
+    align-self: start;
+    margin-top: var(--spacing-xsmall);
+}
+
+#close_button button {
+    background-color: var(--color-black);
+    border-radius: 20px;
+    border-style: none;
+    padding-left: var(--spacing-small);
+    padding-right: var(--spacing-small);
+    padding-top: var(--spacing-xsmall);
+    padding-bottom: var(--spacing-xsmall);
+    cursor: pointer;
+
+    color: var(--color-background);
+    font-family: var(--font-family_primary);
+    font-weight: 900;
+}
+
+#blood_status {
+    grid-column: 2 / 3;
+    grid-row: 1/ 2;
+
+    display: block;
+    background-color: #000;
+    border-radius: 18px;
+    justify-self: start;
+    align-self: start;
+    padding-top: var(--spacing-xxsmall);
+    padding-bottom: var(--spacing-xxsmall);
+    padding-left: var(--spacing-small);
+    padding-right: var(--spacing-small);
+    margin-top: var(--spacing-xsmall);
+
+
+    color: var(--color-background);
+    font-size: var(--font-xsmall);
+}
+
+#popup_name_and_house {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+
+    justify-self: start;
+    align-self: end;
+}
+
+#badge_buttons {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xsmall);
+    align-self: end;
+}
+
+.p_button {
+    padding: var(--spacing-xsmall);
+    border-color: var(--color-background);
+    border-width: 2px;
+    border-radius: 20px;
+    border-style: solid;
+    background-color: transparent;
+
+    font-family: var(--font-family_primary);
+    font-size: var(--spacing-xsmall);
+    color: var(--color-background);
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.i_button {
+    padding: var(--spacing-xsmall);
+    border-color: var(--color-background);
+    border-width: 2px;
+    border-radius: 20px;
+    border-style: solid;
+    background-color: transparent;
+
+    font-family: var(--font-family_primary);
+    font-size: var(--spacing-xsmall);
+    color: var(--color-background);
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.e_button {
+    cursor: pointer;
+    padding: var(--spacing-xsmall);
+    border-color: var(--color-black);
+    border-width: 2px;
+    border-radius: 20px;
+    border-style: solid;
+    background-color: transparent;
+
+    font-family: var(--font-family_primary);
+    font-size: var(--spacing-xsmall);
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 

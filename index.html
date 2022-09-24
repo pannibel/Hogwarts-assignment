@@ -62,8 +62,12 @@
     
         <template id="popup_template">
             <div class="popup_student">
-                <img src="" id="photo" alt="student photo" data-field="photo">
-                <div id="name_and_house">
+                <img src="" id="popup_photo" alt="student photo" data-field="photo">
+                <div id="close_button">
+                    <button>x</button>
+                </div>
+                <div id="blood_status"></div>
+                <div id="popup_name_and_house">
                     <h3 id="fullname" data-field="name"></h3>
                     <h3 id="nickname" data-field="nickname"></h3>
                     <h4 id="house" data-field="house"></h4>
@@ -74,15 +78,11 @@
                     <p id="inq_badge" data-field="i_badge"></p>
                 </div>
                 <div id="badge_buttons">
-                    <button id="p_button">Select as prefect</button>
-                    <button id="i_button">Add to inquisitorial squad</button>
+                    <button id="p_button" class="p_button">Select as prefect</button>
+                    <button id="i_button" class="i_button">Add to inquisitorial squad</button>
                 </div>
                 <div id="expel">
-                    <button id="e_button">Expel</button>
-                </div>
-                <div id="blood_status"></div>
-                <div id="close_button">
-                    <button>Close</button>
+                    <button id="e_button" class="e_button">Expel</button>
                 </div>
             </div>
         </template>

@@ -670,13 +670,26 @@ function popupStudent(student) {
         popupClone.querySelector("#blood_status").textContent = student.blood;
 
         // if student is prefect
-        let p_button = popupClone.querySelector(`#p_button${student.index}`);
+        let p_button = popupClone.querySelector(".p_button");
 
         if (student.isPrefect) {
             p_button.textContent = "Remove from prefects"
+            if (student.house === "Gryffindor") {
+                p_button.style = "background-color: #82392B"
+            };
+            if (student.house === "Slytherin") {
+                p_button.style = "background-color: #3E6B40"
+            };
+            if (student.house === "Hufflepuff") {
+                p_button.style = "background-color: #A68825"
+            };
+            if (student.house === "Ravenclaw") {
+                p_button.style = "background-color: #335A76"
+            };
         } else {
             p_button.textContent = "Select as prefect"
         };
+
 
         // if student is inq squad
         let i_button = popupClone.querySelector(`#i_button${student.index}`);
@@ -700,6 +713,23 @@ function popupStudent(student) {
             e_button.textContent = "Expel"
         };
 
+
+        // styling
+        let popupBackground = popupClone.querySelector(".popup_student");
+        if (student.house === "Gryffindor") {
+            popupBackground.style = "background-color: #B65E4D";
+        };
+        if (student.house === "Slytherin") {
+            popupBackground.style = "background-color: #659A68";
+        };
+        if (student.house === "Hufflepuff") {
+            popupBackground.style = "background-color: #C0A344";
+        };
+        if (student.house === "Ravenclaw") {
+            popupBackground.style = "background-color: #5582A2";
+        };
+
+
         // if for blood status
 
     
@@ -722,9 +752,11 @@ function popupStudent(student) {
         });
 
         // expel button eventlistener
-        document.querySelectorAll(`#e_button${student.index}`).forEach(button => {
-            button.addEventListener("click", expelStudent);
-        });
+        if (!student.isExpelled) {
+            document.querySelectorAll(`#e_button${student.index}`).forEach(button => {
+                button.addEventListener("click", expelStudent);
+            });
+        }
 }
 
 // close pop-up
@@ -740,10 +772,10 @@ function checkIfPrefect() {
     console.log("checkIfPrefect");
     console.log(foundStudent);
 
-    if (foundStudent.isPrefect) {
+    if (foundStudent.isPrefect && !foundStudent.isExpelled) {
         console.log(`${foundStudent.firstname} ${foundStudent.lastname} is prefect of ${foundStudent.house}`);
         removeFromPrefects(foundStudent);
-    } else if (!foundStudent.isPrefect) {
+    } else if (!foundStudent.isPrefect && !foundStudent.isExpelled) {
         console.log(`${foundStudent.firstname} ${foundStudent.lastname} is not prefect of ${foundStudent.house}`);
         checkHousePrefects(foundStudent);
     }
@@ -784,6 +816,19 @@ function addToPrefects(student, housePrefects) {
     console.log(studentPButton.id);
     studentPButton.textContent = "Remove from prefects";
 
+    if (student.house === "Gryffindor") {
+        studentPButton.style = "background-color: #82392B"
+    };
+    if (student.house === "Slytherin") {
+        studentPButton.style = "background-color: #3E6B40"
+    };
+    if (student.house === "Hufflepuff") {
+        studentPButton.style = "background-color: #A68825"
+    };
+    if (student.house === "Ravenclaw") {
+        studentPButton.style = "background-color: #335A76"
+    };
+
     console.log(`${student.firstname} ${student.lastname} has been added to ${student.house} Prefects`);
     console.log(housePrefects);
 }
@@ -813,6 +858,7 @@ function removeFromPrefects(student) {
     const studentPButton = document.querySelector(`#p_button${student.index}`);
     console.log(studentPButton.id);
     studentPButton.textContent = "Select as prefect";
+    studentPButton.style = "";
 
     student.isPrefect = false;
     console.log(`${student.firstname} ${student.lastname} has been removed from ${student.house} Prefects`)
@@ -833,6 +879,7 @@ function expelStudent() {
 
     const studentEButton = document.querySelector(`#e_button${foundStudent.index}`);
     studentEButton.textContent = "Student is expelled";
+    studentEButton.removeEventListener("click", expelStudent);
 
     // removing the expelled student from the allStudent array
     for(let i = 0; i < allStudents.length; i++){
@@ -840,6 +887,10 @@ function expelStudent() {
             allStudents.splice(i, 1); 
         }
     };
+
+    // removing student from prefects and inq squad
+    removeFromPrefects(foundStudent);
+    removeFromInq(foundStudent);
 
     // adding the expelled student to the expelled array
     expelledStudents.push(foundStudent);
@@ -849,6 +900,16 @@ function expelStudent() {
     // displaying the studentList instantly without the expelled student
     buildList();
     console.log(allStudents);
+
+    //styling
+    const studentPButton = document.querySelector(`#p_button${foundStudent.index}`);
+    studentPButton.removeEventListener("click", checkIfPrefect);
+
+    const studentIButton = document.querySelector(`#i_button${foundStudent.index}`);
+    studentIButton.removeEventListener("click", changeInqStatus);
+
+    const studentName = document.querySelector(`#fullname`);
+    studentName.removeEventListener("click", selectStudent);
 }
 
 
@@ -873,10 +934,10 @@ function bloodArrays() {
 function changeInqStatus() {
     console.log("changeInqStatus");
 
-    if (foundStudent.isInq) {
+    if (foundStudent.isInq && !foundStudent.isExpelled) {
         console.log(`${foundStudent.firstname} ${foundStudent.lastname} is already part of the inquisitorial squad`);
         removeFromInq(foundStudent);
-    } else if (!foundStudent.isInq) {
+    } else if (!foundStudent.isInq && !foundStudent.isExpelled) {
         console.log(`${foundStudent.firstname} ${foundStudent.lastname} is not part of the inquisitorial squad`);
         makeInq(foundStudent);
     }
@@ -890,6 +951,7 @@ function makeInq(student) {
 
     const studentIButton = document.querySelector(`#i_button${student.index}`);
     studentIButton.textContent = "Remove from inquisitorial squad";
+    studentIButton.style = "background-color: black";
 
     console.log(`${student.firstname} ${student.lastname} has been added to the Inquisitorial Squad`);
     console.log(inqSquad);
@@ -908,6 +970,7 @@ function removeFromInq(student) {
 
     const studentIButton = document.querySelector(`#i_button${student.index}`);
     studentIButton.textContent = "Add to inquisitorial squad";
+    studentIButton.style = "";
 
     console.log(`${student.firstname} ${student.lastname} has been removed from the Inquisitorial Squad`);
     console.log(inqSquad);
