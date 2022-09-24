@@ -56,6 +56,16 @@ const Student = {
     isInq: false,
 };
 
+// for styling changes
+let allstudButton = document.querySelector("#all_students");
+let gryfButton = document.querySelector("#gryf");
+let slyButton = document.querySelector("#sly");
+let hufButton = document.querySelector("#huf");
+let ravButton = document.querySelector("#rav");
+let fnSortButton = document.querySelector("[data-sort='first_name");
+let lnSortButton = document.querySelector("[data-sort='last_name");
+let hSortButton = document.querySelector("[data-sort='house");
+
 // EVENTLISTENER FUNCTIONS
 // buttons
 function registerButtons() {
@@ -72,6 +82,10 @@ function registerButtons() {
 
         // searching
     document.querySelector("#search_button").addEventListener("click", receiveInput);
+
+        // all students button for style change
+    allstudButton.addEventListener("click", buttonsReset);
+    
 }
 
 // making the input field search on enter key press
@@ -84,6 +98,15 @@ function enterKey() {
             document.querySelector("#search_button").click();
         }
     })
+}
+
+// making the allstudents button be colored
+function buttonsReset() {
+    allstudButton.style = "background-color: #000; color: #ECE4DF";
+    gryfButton.style = "";
+    slyButton.style = "";
+    hufButton.style = "";
+    ravButton.style = "";
 }
 
 
@@ -140,6 +163,7 @@ function prepareObjects(studentJSON) {
     bloodArrays();
 
     displayList(allStudents);
+    buttonsReset();
 }
 
 
@@ -286,7 +310,7 @@ function selectFilter() {
         currentArray = expelledStudents;
         console.log(`Current array is expelledStudents`);
     }
-
+    buttonsReset();
     setFilter(option);
 }
 
@@ -315,15 +339,39 @@ function filterList(filteredList) {
     // for house
     if (settings.filterBy === "gryf"){
         filteredList = currentArray.filter(isGryf);
+        // styling
+        gryfButton.style = "background-color: #984535; color: #ECE4DF";
+        allstudButton.style = "";
+        slyButton.style = "";
+        hufButton.style = "";
+        ravButton.style = "";
     };
     if (settings.filterBy === "sly"){
         filteredList = currentArray.filter(isSly);
+        // styling
+        slyButton.style = "background-color: #4D7D4F; color: #ECE4DF";
+        allstudButton.style = "";
+        gryfButton.style = "";
+        hufButton.style = "";
+        ravButton.style = "";
     };
     if (settings.filterBy === "huf"){
         filteredList = currentArray.filter(isHuf);
+        // styling
+        hufButton.style = "background-color: #C0A344; color: #ECE4DF";
+        allstudButton.style = "";
+        gryfButton.style = "";
+        slyButton.style = "";
+        ravButton.style = "";
     };
     if (settings.filterBy === "rav"){
         filteredList = currentArray.filter(isRav);
+        // styling
+        ravButton.style = "background-color: #5582A2; color: #ECE4DF";
+        allstudButton.style = "";
+        gryfButton.style = "";
+        slyButton.style = "";
+        hufButton.style = "";
     };
 
     // for general
@@ -411,15 +459,43 @@ function sortList(sortedList) {
 
 
     if (settings.sortBy === "first_name") {
-        sortedList = sortedList.sort(sortByFirstname)
+        sortedList = sortedList.sort(sortByFirstname);
+        fnSortButton.style = "background-color: #000; color: #ECE4DF";
+        lnSortButton.style = "";
+        hSortButton.style = "";
+
+        if (direction === -1) {
+            fnSortButton.textContent = "First name A-Z"
+        } else {
+            fnSortButton.textContent = "First name Z-A"
+        }
     };
 
     if (settings.sortBy === "last_name") {
         sortedList = sortedList.sort(sortByLastname);
+        lnSortButton.style = "background-color: #000; color: #ECE4DF";
+        fnSortButton.style = "";
+        hSortButton.style = "";
+
+        if (direction === -1) {
+            lnSortButton.textContent = "Last name A-Z"
+        } else {
+            lnSortButton.textContent = "Last name Z-A"
+        }
     };
 
     if (settings.sortBy === "house") {
         sortedList = sortedList.sort(sortByHouse);
+        hSortButton.style = "background-color: #000; color: #ECE4DF";
+        fnSortButton.style = "";
+        lnSortButton.style = "";
+
+        if (direction === -1) {
+            hSortButton.textContent = "House A-Z"
+        } else {
+            hSortButton.textContent = "House Z-A"
+
+        }
     };
     
 
@@ -485,9 +561,9 @@ function findResults(searchedStudents) {
     searchedStudents = allStudents.filter(findMe);
 
     function findMe(student) {
-        let stringvalues = Object.values(student).toString();
-        stringvalues = stringvalues.toLowerCase();
-        return stringvalues.includes(settings.searchBy);
+        if (student.lastname.toLowerCase().includes(settings.searchBy) ||
+        student.firstname.toLowerCase().includes(settings.searchBy)) 
+        return student;
     }
 
     console.log(searchedStudents);
@@ -497,6 +573,7 @@ function findResults(searchedStudents) {
 function searchResults() {
     const searchedList = findResults(allStudents);
     displayList(searchedList);
+    buttonsReset();
 }
 
 
@@ -564,7 +641,6 @@ function findStudent(currentArray) {
 
 
 //* POP UP OF STUDENT
-
 function selectStudent(event) {
     const selectedStudent = event.target.parentElement.parentElement.id;
     console.log(`User selected ${selectedStudent}`);
@@ -660,7 +736,6 @@ function closePopup() {
 
 
 //* NAMING STUDENT AS PREFECT
-
 function checkIfPrefect() {
     console.log("checkIfPrefect");
     console.log(foundStudent);

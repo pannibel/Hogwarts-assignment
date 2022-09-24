@@ -383,6 +383,10 @@ h2 {
     flex-direction: column;
 }
 
+#fullname {
+    cursor: pointer;
+}
+
 .student h3 {
     font-family: var(--font-family_primary);
     font-size: var(--font-small);
