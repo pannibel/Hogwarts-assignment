@@ -44,7 +44,6 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
@@ -56,10 +55,6 @@ main {
     grid-template-columns: 25% 50% 25%;
     grid-template-rows: auto;
     justify-content: center;
-}
-
-img {
-    max-width: 100%;
 }
 
 .hidden {
@@ -371,11 +366,15 @@ h2 {
     gap: 2rem;
     padding: var(--spacing-xsmall);
 
-    background-color: var(--color-backgroundshade);
+    background-color: var(--color-background);
     border-radius: 20px;
     border-style: solid;
     border-color: var(--color-black);
     border-width: 1px;   
+}
+
+.student:hover {
+    background-color: var(--color-backgroundshade);
 }
 
 #name_and_house {
@@ -400,9 +399,21 @@ h2 {
     color: #000;
 }
 
+#badges {
+    display: flex;
+}
+
+.inq_badge, .prefect_badge {
+    width: 10%;
+    height: auto;
+    justify-self: center;
+    align-self: center;
+}
 
 
-/* POP-UP TIME */
+
+/* * POP-UP TIME * */
+
 #container {
     position: fixed;
     top: 0%;
@@ -450,20 +461,21 @@ h2 {
 
 #popup_photo {
     grid-column: 1 / 2;
-    grid-row: 1 / 4;
+    grid-row: 1 / 3;
     margin-right: var(--spacing-medium);
+    align-self: center;
+    justify-self: start;
 
     width: 100%;
     height: auto;
-    border-style: solid;
-    border-color: #000;
-    border-width: 2px;
-    border-radius: 60px;
 }
 
 #expel {
     grid-column: 1 /2;
     grid-row: 4 / 5;
+
+    align-self: center;
+    justify-self: center;
 }
 
 #close_button {
@@ -497,12 +509,12 @@ h2 {
     border-radius: 18px;
     justify-self: start;
     align-self: start;
+
     padding-top: var(--spacing-xxsmall);
     padding-bottom: var(--spacing-xxsmall);
     padding-left: var(--spacing-small);
     padding-right: var(--spacing-small);
     margin-top: var(--spacing-xsmall);
-
 
     color: var(--color-background);
     font-size: var(--font-xsmall);
@@ -513,17 +525,33 @@ h2 {
     grid-row: 1 / 2;
 
     justify-self: start;
-    align-self: end;
+    align-self: center;
+
+    font-size: var(--font-medium);
+}
+
+#crestdiv {
+    grid-column: 2 / 3;
+    grid-row: 2 / 5;
+
+    display: flex;
+    justify-content: center;
+    align-self: flex-start;
+}
+
+#crest {
+    width: 70%;
+    height: auto;
 }
 
 #badge_buttons {
-    grid-column: 2 / 3;
+    grid-column: 1 / 2;
     grid-row: 3 / 4;
 
     display: flex;
     flex-direction: column;
+    align-self: start;
     gap: var(--spacing-xsmall);
-    align-self: end;
 }
 
 .p_button {

@@ -255,10 +255,9 @@ function cleanData(object) {
         lastname = texts[2];
     };
 
-    //adding images
+    // adding images
     if (lastname && !lastname.includes("-")) {
         image = lastname.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
-
     } else if (lastname.includes("-")) {
         let afterhyphen = lastname.substring(lastname.indexOf("-")+1);
         image = afterhyphen.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
@@ -602,6 +601,24 @@ function displayStudent(student) {
     clone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
     clone.querySelector("[data-field=house]").textContent = student.house;
     clone.querySelector("div.student").setAttribute("id", `${student.index}`);
+    clone.querySelector(".inq_badge").setAttribute("id", `inq_badge${student.index}`);
+    clone.querySelector(".prefect_badge").setAttribute("id", `prefect_badge${student.index}`);
+
+    // if student is inq
+    let i_badge = clone.querySelector(`#inq_badge${student.index}`);
+    if (student.isInq) {
+        // i_badge.classList.remove("hidden");
+    } else {
+       // i_badge.classList.add("hidden");
+    }
+
+    // if student is pref
+    let p_badge = clone.querySelector(`#prefect_badge${student.index}`);
+    if (student.isPrefect) {
+        //  p_badge.classList.remove("hidden");
+    } else {
+        // p_badge.classList.add("hidden");
+    }
 
     // append clone to list
     document.querySelector("#student_list").appendChild(clone);
@@ -609,7 +626,8 @@ function displayStudent(student) {
     // eventlistener for opening the pop-up
     document.querySelectorAll("#fullname").forEach(button => {
         button.addEventListener("click", selectStudent)
-    })
+    });
+
 }
 
 
@@ -663,11 +681,29 @@ function popupStudent(student) {
         popupClone.querySelector("[data-field=name]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
         popupClone.querySelector("[data-field=nickname]").textContent = `${student.nickname}`;
         popupClone.querySelector("[data-field=house]").textContent = student.house;
+        popupClone.querySelector("#crest").src = `images/${student.house}.png`;
+
         popupClone.querySelector(".popup_student").setAttribute("id", `popup${student.index}`);
         popupClone.querySelector("#p_button").setAttribute("id", `p_button${student.index}`);
         popupClone.querySelector("#i_button").setAttribute("id", `i_button${student.index}`);
         popupClone.querySelector("#e_button").setAttribute("id", `e_button${student.index}`);
         popupClone.querySelector("#blood_status").textContent = student.blood;
+
+        // styling
+        let popupBackground = popupClone.querySelector(".popup_student");
+        if (student.house === "Gryffindor") {
+            popupBackground.style = "background-color: #B65E4D";
+        };
+        if (student.house === "Slytherin") {
+            popupBackground.style = "background-color: #659A68";
+        };
+        if (student.house === "Hufflepuff") {
+            popupBackground.style = "background-color: #C0A344";
+        };
+        if (student.house === "Ravenclaw") {
+            popupBackground.style = "background-color: #5582A2";
+        };
+
 
         // if student is prefect
         let p_button = popupClone.querySelector(".p_button");
@@ -695,7 +731,8 @@ function popupStudent(student) {
         let i_button = popupClone.querySelector(`#i_button${student.index}`);
 
         if (student.isInq) {
-            i_button.textContent = "Remove from inquisitorial squad"
+            i_button.textContent = "Remove from inquisitorial squad";
+            i_button.style = "background-color: black; color: #ECE4DF";
         };
         if (!student.isInq) {
             i_button.textContent = "Add to inquisitorial squad"
@@ -709,24 +746,13 @@ function popupStudent(student) {
 
         if (student.isExpelled) {
             e_button.textContent = "Student is expelled"
+            e_button.style = "background-color: black; color: #D33C1F";
+            popupBackground.style = "background-color: #929292";
+
+            const studentImage = popupClone.querySelector(`#popup${student.index} img`);
+            studentImage.style = "filter: grayscale(1)";
         } else {
             e_button.textContent = "Expel"
-        };
-
-
-        // styling
-        let popupBackground = popupClone.querySelector(".popup_student");
-        if (student.house === "Gryffindor") {
-            popupBackground.style = "background-color: #B65E4D";
-        };
-        if (student.house === "Slytherin") {
-            popupBackground.style = "background-color: #659A68";
-        };
-        if (student.house === "Hufflepuff") {
-            popupBackground.style = "background-color: #C0A344";
-        };
-        if (student.house === "Ravenclaw") {
-            popupBackground.style = "background-color: #5582A2";
         };
 
 
@@ -879,6 +905,7 @@ function expelStudent() {
 
     const studentEButton = document.querySelector(`#e_button${foundStudent.index}`);
     studentEButton.textContent = "Student is expelled";
+    studentEButton.style = "background-color: black; color: #D33C1F";
     studentEButton.removeEventListener("click", expelStudent);
 
     // removing the expelled student from the allStudent array
@@ -902,6 +929,12 @@ function expelStudent() {
     console.log(allStudents);
 
     //styling
+    const popupBackground = document.querySelector(`#popup${foundStudent.index}`);
+    popupBackground.style = "background-color: #929292";
+
+    const studentImage = document.querySelector(`#popup${foundStudent.index} img`);
+    studentImage.style = "filter: grayscale(1)";
+
     const studentPButton = document.querySelector(`#p_button${foundStudent.index}`);
     studentPButton.removeEventListener("click", checkIfPrefect);
 
@@ -952,6 +985,9 @@ function makeInq(student) {
     const studentIButton = document.querySelector(`#i_button${student.index}`);
     studentIButton.textContent = "Remove from inquisitorial squad";
     studentIButton.style = "background-color: black";
+
+   // const i_badge = document.querySelector(`#inq_badge${student.index}`);
+   // i_badge.classList.remove("hidden");
 
     console.log(`${student.firstname} ${student.lastname} has been added to the Inquisitorial Squad`);
     console.log(inqSquad);
