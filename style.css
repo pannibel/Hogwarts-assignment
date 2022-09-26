@@ -44,6 +44,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -183,7 +184,7 @@ h2 {
     justify-self: center;
 
     color: var(--color-black);
-    border-color: var(--color-black);
+    border-color: var(--color-background);
     background-color: var(--color-backgroundshade);
 }
 
@@ -375,6 +376,10 @@ h2 {
 
 .student:hover {
     background-color: var(--color-backgroundshade);
+}
+
+.student img {
+    width: fit-content;
 }
 
 #name_and_house {
@@ -608,9 +613,26 @@ h2 {
 
 footer {
     display: flex;
+    flex-direction: column;
+    gap: var(--spacing-small);
     justify-content: center;
+    align-items: center;
     padding: var(--spacing-large);
     font-family: var(--font-family_primary);
     font-size: var(--font-small);
     color: #000;
+}
+
+#hack {
+    justify-self: center;
+    font: var(--font-family_primary);
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+    color: transparent;
+    cursor: pointer;
+}
+
+#hack:hover {
+    color: #000
 }

@@ -6,7 +6,7 @@
 // ?
 // TODO
 
-// * STAGE: FETCHING FAMILIES AND BLOOD STATUS (done)
+// * STAGE: HACKING
 
 // LETS START THIS S
 
@@ -66,6 +66,10 @@ let fnSortButton = document.querySelector("[data-sort='first_name");
 let lnSortButton = document.querySelector("[data-sort='last_name");
 let hSortButton = document.querySelector("[data-sort='house");
 
+// for hacking
+let hackButton = document.querySelector("#hack");
+let hacked = false;
+
 // EVENTLISTENER FUNCTIONS
 // buttons
 function registerButtons() {
@@ -85,6 +89,9 @@ function registerButtons() {
 
         // all students button for style change
     allstudButton.addEventListener("click", buttonsReset);
+
+        // hacking
+    hackButton.addEventListener("click", checkIfHacked);
     
 }
 
@@ -102,7 +109,11 @@ function enterKey() {
 
 // making the allstudents button be colored
 function buttonsReset() {
-    allstudButton.style = "background-color: #000; color: #ECE4DF";
+    if (!hacked) {
+        allstudButton.style = "background-color: #000; color: #ECE4DF";
+    } else if (hacked) {
+        allstudButton.style = "border-color: #000; background-color: #ECE4DF; color: #000";
+    }
     gryfButton.style = "";
     slyButton.style = "";
     hufButton.style = "";
@@ -265,7 +276,11 @@ function cleanData(object) {
         let afterhyphen = lastname.substring(lastname.indexOf("-")+1);
         image = afterhyphen.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
     } else if (!lastname) {
-        image = "";
+        if (object.gender === "girl") {
+            image = "unknown_girl.png";
+        } else {
+            image = "unknown_boy.png";
+        }
     }
 
 
@@ -343,7 +358,11 @@ function filterList(filteredList) {
         filteredList = currentArray.filter(isGryf);
         // styling
         gryfButton.style = "background-color: #984535; color: #ECE4DF";
-        allstudButton.style = "";
+        if (!hacked) {
+            allstudButton.style = "border-color: black; background-color: #E5D8D0; color: black";
+        } else if (hacked) {
+            allstudButton.style = "border-color: #ECE4DF; background-color: black; color: #ECE4DF";
+        }
         slyButton.style = "";
         hufButton.style = "";
         ravButton.style = "";
@@ -352,7 +371,11 @@ function filterList(filteredList) {
         filteredList = currentArray.filter(isSly);
         // styling
         slyButton.style = "background-color: #4D7D4F; color: #ECE4DF";
-        allstudButton.style = "";
+        if (!hacked) {
+            allstudButton.style = "border-color: black; background-color: #E5D8D0; color: black";
+        } else if (hacked) {
+            allstudButton.style = "border-color: #ECE4DF; background-color: black; color: #ECE4DF";
+        }
         gryfButton.style = "";
         hufButton.style = "";
         ravButton.style = "";
@@ -361,7 +384,11 @@ function filterList(filteredList) {
         filteredList = currentArray.filter(isHuf);
         // styling
         hufButton.style = "background-color: #C0A344; color: #ECE4DF";
-        allstudButton.style = "";
+        if (!hacked) {
+            allstudButton.style = "border-color: black; background-color: #E5D8D0; color: black";
+        } else if (hacked) {
+            allstudButton.style = "border-color: #ECE4DF; background-color: black; color: #ECE4DF";
+        }
         gryfButton.style = "";
         slyButton.style = "";
         ravButton.style = "";
@@ -370,7 +397,11 @@ function filterList(filteredList) {
         filteredList = currentArray.filter(isRav);
         // styling
         ravButton.style = "background-color: #5582A2; color: #ECE4DF";
-        allstudButton.style = "";
+        if (!hacked) {
+            allstudButton.style = "border-color: black; background-color: #E5D8D0; color: black";
+        } else if (hacked) {
+            allstudButton.style = "border-color: #ECE4DF; background-color: black; color: #ECE4DF";
+        }
         gryfButton.style = "";
         slyButton.style = "";
         hufButton.style = "";
@@ -462,7 +493,7 @@ function sortList(sortedList) {
 
     if (settings.sortBy === "first_name") {
         sortedList = sortedList.sort(sortByFirstname);
-        fnSortButton.style = "background-color: #000; color: #ECE4DF";
+        fnSortButton.style = "background-color: #000; color: #ECE4DF; border-color: #ECE4DF";
         lnSortButton.style = "";
         hSortButton.style = "";
 
@@ -475,7 +506,7 @@ function sortList(sortedList) {
 
     if (settings.sortBy === "last_name") {
         sortedList = sortedList.sort(sortByLastname);
-        lnSortButton.style = "background-color: #000; color: #ECE4DF";
+        lnSortButton.style = "background-color: #000; color: #ECE4DF; border-color: #ECE4DF";
         fnSortButton.style = "";
         hSortButton.style = "";
 
@@ -488,7 +519,7 @@ function sortList(sortedList) {
 
     if (settings.sortBy === "house") {
         sortedList = sortedList.sort(sortByHouse);
-        hSortButton.style = "background-color: #000; color: #ECE4DF";
+        hSortButton.style = "background-color: #000; color: #ECE4DF; border-color: #ECE4DF";
         fnSortButton.style = "";
         lnSortButton.style = "";
 
@@ -786,6 +817,12 @@ function popupStudent(student) {
                 button.addEventListener("click", expelStudent);
             });
         }
+
+
+        // if student is me
+        if (student.index === 35) {
+            document.querySelector("#expel").classList.add("hidden");
+        }
 }
 
 // close pop-up
@@ -997,6 +1034,12 @@ function makeInq(student) {
 
     console.log(`${student.firstname} ${student.lastname} has been added to the Inquisitorial Squad`);
     console.log(inqSquad);
+
+
+    // if hacked
+    if (hacked) {
+        setTimeout(changeInqStatus, 2000);
+    }
 }
 
 function removeFromInq(student) {
@@ -1017,4 +1060,76 @@ function removeFromInq(student) {
     console.log(`${student.firstname} ${student.lastname} has been removed from the Inquisitorial Squad`);
     console.log(inqSquad);
     buildList(currentArray);
+}
+
+
+
+//* HACKING
+function checkIfHacked() {
+    console.log("check if hacked");
+    if (!hacked) {
+        hackTheSystem()
+    } else if (hacked) {
+        console.log("System is already hacked, action not possible")
+    }
+}
+
+function hackTheSystem() {
+    hacked = true;
+    hackedColorChange();
+    addMe();
+    removeInqs(allStudents);
+    buttonsReset();
+}
+
+function hackedColorChange() {
+
+    document.querySelector("body").style = "background-color: black";
+    document.querySelector("h1").style = "color: #ECE4DF";
+    document.querySelector("h2").style = "-webkit-text-stroke: 1px #ECE4DF";
+
+    document.querySelector("#searching button").style = "border-color: #ECE4DF";
+    document.querySelector("#filtering_and_sorting button").style = "border-color: #ECE4DF";
+    document.querySelector("#sort button").style = "border-color: #ECE4DF";
+    document.querySelector("#sort_label").style = "color: #ECE4DF";
+    document.querySelector("#displayedNumber").style = "color: #ECE4DF";
+
+    document.querySelector("#student_list").style = "border-color: #ECE4DF; background-color: #000";
+    document.querySelectorAll(".student").forEach(student => student.style = "border-color: #ECE4DF");
+
+    document.querySelector("footer p").style = "color: #ECE4DF";
+}
+
+function addMe() {
+    const me = Object.create(Student);
+
+    me.firstname = "Anna";
+    me.middlename = "";
+    me.lastname = "Belevski";
+    me.nickname = `"Panni"`;
+    me.gender = "girl";
+    me.house = "Slytherin";
+    me.image = "anna_b.png";
+    me.blood = "pureblood";
+    me.isPrefect = false;
+    me.isExpelled = false;
+    me.isInq = false;
+    me.index = 35;
+
+    allStudents.unshift(me);
+    displayList(allStudents);
+}
+
+function removeInqs() {
+    console.log("remove inqs");
+    
+    allStudents.forEach(student => {
+        if (student.isInq) {
+            changeInqStatus;
+        }});
+
+    while(inqSquad.length > 0) {
+        inqSquad.pop();
+    }
+    console.log(inqSquad);
 }
