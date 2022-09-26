@@ -607,17 +607,17 @@ function displayStudent(student) {
     // if student is inq
     let i_badge = clone.querySelector(`#inq_badge${student.index}`);
     if (student.isInq) {
-        // i_badge.classList.remove("hidden");
+        i_badge.classList.remove("hidden");
     } else {
-       // i_badge.classList.add("hidden");
+       i_badge.classList.add("hidden");
     }
 
     // if student is pref
     let p_badge = clone.querySelector(`#prefect_badge${student.index}`);
     if (student.isPrefect) {
-        //  p_badge.classList.remove("hidden");
+        p_badge.classList.remove("hidden");
     } else {
-        // p_badge.classList.add("hidden");
+        p_badge.classList.add("hidden");
     }
 
     // append clone to list
@@ -842,6 +842,9 @@ function addToPrefects(student, housePrefects) {
     console.log(studentPButton.id);
     studentPButton.textContent = "Remove from prefects";
 
+    const p_badge = document.querySelector(`#prefect_badge${student.index}`);
+    p_badge.classList.remove("hidden");
+
     if (student.house === "Gryffindor") {
         studentPButton.style = "background-color: #82392B"
     };
@@ -986,8 +989,8 @@ function makeInq(student) {
     studentIButton.textContent = "Remove from inquisitorial squad";
     studentIButton.style = "background-color: black";
 
-   // const i_badge = document.querySelector(`#inq_badge${student.index}`);
-   // i_badge.classList.remove("hidden");
+    const i_badge = document.querySelector(`#inq_badge${student.index}`);
+    i_badge.classList.remove("hidden");
 
     console.log(`${student.firstname} ${student.lastname} has been added to the Inquisitorial Squad`);
     console.log(inqSquad);

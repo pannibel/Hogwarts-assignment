@@ -401,11 +401,10 @@ h2 {
 
 #badges {
     display: flex;
+    gap: var(--spacing-xxsmall);
 }
 
 .inq_badge, .prefect_badge {
-    width: 10%;
-    height: auto;
     justify-self: center;
     align-self: center;
 }
