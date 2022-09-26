@@ -256,7 +256,10 @@ function cleanData(object) {
     };
 
     // adding images
-    if (lastname && !lastname.includes("-")) {
+
+    if (lastname === "Patil") {
+        image = lastname.toLowerCase() + "_" + firstname.toLowerCase() + ".png";
+    } else if (lastname && !lastname.includes("-")) {
         image = lastname.toLowerCase() + "_" + firstname[0].toLowerCase() + ".png";
     } else if (lastname.includes("-")) {
         let afterhyphen = lastname.substring(lastname.indexOf("-")+1);
