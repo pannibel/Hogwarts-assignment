@@ -866,6 +866,7 @@ function checkHousePrefects(student) {
 
     if (housePrefects.length === 2) {
         console.log("Action not possible");
+        prefectWarning();
     } else if (housePrefects.length < 2) {
         console.log("Action possible");
         addToPrefects(student, housePrefects);
@@ -934,6 +935,15 @@ function removeFromPrefects(student) {
     console.log(housePrefects);
 
     buildList(currentArray);
+}
+
+function prefectWarning() {
+    document.querySelector("#warning_popup").classList.remove("hidden");
+    setTimeout(closeWarning, 3000);
+}
+
+function closeWarning() {
+    document.querySelector("#warning_popup").classList.add("hidden");
 }
 
 
@@ -1122,7 +1132,7 @@ function addMe() {
 
 function removeInqs() {
     console.log("remove inqs");
-    
+
     allStudents.forEach(student => {
         if (student.isInq) {
             changeInqStatus;
