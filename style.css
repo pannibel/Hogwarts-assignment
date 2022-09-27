@@ -538,7 +538,7 @@ h2 {
 }
 
 #crest {
-    width: 70%;
+    width: 80%;
     height: auto;
 }
 
@@ -619,6 +619,7 @@ h2 {
     align-items: center;
     z-index: 4;
     justify-self: center;
+    top: 15%;
     padding-left: var(--spacing-large);
     padding-right: var(--spacing-large);
     padding-top: var(--spacing-small);

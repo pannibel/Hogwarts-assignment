@@ -24,6 +24,7 @@ let currentArray;
 let GryffindorPrefects = [], SlytherinPrefects = [], HufflepuffPrefects = [], RavenclawPrefects = [];
 let housePrefects;
 let pureBloods = [], halfBloods = [], muggleBorns = [];
+let bloodStatArray = [];
 let inqSquad = [];
 let studentNumber;
 
@@ -789,12 +790,10 @@ function popupStudent(student) {
             e_button.textContent = "Expel"
         };
 
-
-        // if for blood status
-
-    
         // append clone to list
         document.querySelector("#pop_up").appendChild(popupClone);
+
+
 
         //closing the pop-up
         document.querySelectorAll("#close_button").forEach(button => {
@@ -1048,7 +1047,7 @@ function makeInq(student) {
 
     // if hacked
     if (hacked) {
-        setTimeout(changeInqStatus, 2000);
+        setTimeout(changeInqStatus, 1000);
     }
 }
 
@@ -1087,9 +1086,11 @@ function checkIfHacked() {
 function hackTheSystem() {
     hacked = true;
     hackedColorChange();
-    addMe();
     removeInqs(allStudents);
+    randomizeBloodStatus();
+    addMe();
     buttonsReset();
+    displayList(allStudents);
 }
 
 function hackedColorChange() {
@@ -1127,7 +1128,6 @@ function addMe() {
     me.index = 35;
 
     allStudents.unshift(me);
-    displayList(allStudents);
 }
 
 function removeInqs() {
@@ -1142,4 +1142,20 @@ function removeInqs() {
         inqSquad.pop();
     }
     console.log(inqSquad);
+}
+
+function randomizeBloodStatus() {
+    console.log("random blood status");
+
+    allStudents.forEach(student => {
+        if (student.blood === "pureblood") {
+            bloodStatArray = ["half-blood", "muggleborn"];
+            let randomBloodStatus = bloodStatArray[Math.floor(Math.random()*bloodStatArray.length)];
+            student.blood = randomBloodStatus;
+        } else if (student.blood === "half-blood" || student.blood === "muggleborn") {
+            student.blood = "pureblood";
+        }
+    });
+
+    console.log(allStudents);
 }
