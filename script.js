@@ -590,6 +590,12 @@ function setSearch(input) {
     searchResults();
 }
 
+function searchResults() {
+    const searchedList = findResults(allStudents);
+    displayList(searchedList);
+    buttonsReset();
+}
+
 function findResults(searchedStudents) {
 
     searchedStudents = allStudents.filter(findMe);
@@ -604,11 +610,6 @@ function findResults(searchedStudents) {
     return searchedStudents;
 }
 
-function searchResults() {
-    const searchedList = findResults(allStudents);
-    displayList(searchedList);
-    buttonsReset();
-}
 
 
 
